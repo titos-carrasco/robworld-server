@@ -1,0 +1,92 @@
+#include "RobotEPuck.h"
+
+RobotEPuck::RobotEPuck( std::string _name, unsigned _caps ) :
+    RobotBase( _name, "epuck" ), EPuck( _caps ),
+    myProximitySensorValues{},
+    myProximitySensorDistances{},
+    myRingLed(0),
+    myCameraImage{}
+{
+    std::cout << ">> Construyendo robot '" << std::flush;
+    std::cout << name << std::flush;
+    std::cout << "'" << std::endl;
+}
+
+RobotEPuck::~RobotEPuck()
+{
+    std::cout << ">> Destruyendo robot '" << std::flush;
+    std::cout << name << std::flush;
+    std::cout << "'" << std::endl;
+}
+
+void RobotEPuck::getSensors( JSON& resp )
+{
+    RobotBase::mtx_enki.lock();
+
+    resp["proximitySensorValues"] = myProximitySensorValues;
+    resp["proximitySensorDistances"] = myProximitySensorDistances;
+
+    RobotBase::mtx_enki.unlock();
+}
+
+void RobotEPuck::setLeds( double* leds, int len )
+{
+    RobotBase::mtx_enki.lock();
+
+    myRingLed = leds[0];
+
+    RobotBase::mtx_enki.unlock();
+}
+
+unsigned char* RobotEPuck::getCameraImage( unsigned int* len )
+{
+    RobotBase::mtx_enki.lock();
+
+    *len = sizeof( myCameraImage )/sizeof( myCameraImage[0] );
+    unsigned char *img = new unsigned char[*len];
+    memcpy( img, myCameraImage, *len );
+    RobotBase::mtx_enki.unlock();
+    return img;
+}
+
+void RobotEPuck::controlStep( double dt )
+{
+    RobotBase::mtx_enki.lock();
+
+    // hacia el robot
+    EPuck::setLedRing( myRingLed );
+
+    // desde el robot
+    myProximitySensorValues[0] = EPuck::infraredSensor0.getValue();
+    myProximitySensorValues[1] = EPuck::infraredSensor1.getValue();
+    myProximitySensorValues[2] = EPuck::infraredSensor2.getValue();
+    myProximitySensorValues[3] = EPuck::infraredSensor3.getValue();
+    myProximitySensorValues[4] = EPuck::infraredSensor4.getValue();
+    myProximitySensorValues[5] = EPuck::infraredSensor5.getValue();
+    myProximitySensorValues[6] = EPuck::infraredSensor6.getValue();
+    myProximitySensorValues[7] = EPuck::infraredSensor7.getValue();
+
+    myProximitySensorDistances[0] = EPuck::infraredSensor0.getDist();
+    myProximitySensorDistances[1] = EPuck::infraredSensor1.getDist();
+    myProximitySensorDistances[2] = EPuck::infraredSensor2.getDist();
+    myProximitySensorDistances[3] = EPuck::infraredSensor3.getDist();
+    myProximitySensorDistances[4] = EPuck::infraredSensor4.getDist();
+    myProximitySensorDistances[5] = EPuck::infraredSensor5.getDist();
+    myProximitySensorDistances[6] = EPuck::infraredSensor6.getDist();
+    myProximitySensorDistances[7] = EPuck::infraredSensor7.getDist();
+
+    int n = 0;
+    for(size_t i = 0; i < camera.image.size(); i++ )
+    {
+        Enki::Color c = camera.image[i];
+        myCameraImage[n++] = int( c.r()*255 );
+        myCameraImage[n++] = int( c.g()*255 );
+        myCameraImage[n++] = int( c.b()*255 );
+        myCameraImage[n++] = int( c.a()*255 );
+    }
+
+    RobotBase::mtx_enki.unlock();
+
+    RobotBase::myControlStep( this );
+    EPuck::controlStep( dt );
+}
