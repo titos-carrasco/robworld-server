@@ -11,11 +11,11 @@
 # cd build
 # cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DOpenGL_GL_PREFERENCE=GLVND ..
 # cmake --build . --config Release
-#$ ./myplayground ../worlds/simple.world
+# ./bin/robworld ../../test/worlds/simple.world
 
 cmake_minimum_required(VERSION 3.1.0)
 
-project( myplayground LANGUAGES CXX )
+project( robworld LANGUAGES CXX )
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -34,7 +34,7 @@ find_package( OpenGL REQUIRED )
 
 add_executable( ${PROJECT_NAME}
     src/main.cpp
-    src/MyPlayground.cpp
+    src/RobotWorld.cpp
     src/RobotBase.cpp
     src/RobotEPuck.cpp
     src/RobotThymio2.cpp

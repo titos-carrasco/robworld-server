@@ -13,11 +13,11 @@
 #include <fcntl.h>
 
 #include <json.hpp>
-#include "MyPlayground.h"
+#include "RobotWorld.h"
 
 using JSON = nlohmann::json;
 
-MyPlayground::MyPlayground( std::string world_file_name ) :
+RobotWorld::RobotWorld( std::string world_file_name ) :
     world( NULL ), walls( 10 )
 {
     // creamos el socket
@@ -317,34 +317,34 @@ MyPlayground::MyPlayground( std::string world_file_name ) :
     std::cout << ">> Mundo creado" << std::endl;
 }
 
-MyPlayground::~MyPlayground()
+RobotWorld::~RobotWorld()
 {
-    std::cout << ">> Destruyendo el playground" << std::endl;
+    std::cout << ">> Destruyendo el mundo de robots" << std::endl;
     delete world;
 }
 
-Enki::World* MyPlayground::getWorld()
+Enki::World* RobotWorld::getWorld()
 {
     return world;
 }
 
-double MyPlayground::getWalls()
+double RobotWorld::getWalls()
 {
     return walls;
 }
 
 // el manejador de conexiones lo trabajamos en un hilo
-void MyPlayground::run()
+void RobotWorld::run()
 {
     std::cout << ">> Iniciando despachador de conexiones" << std::endl;
     tDispatcherRunning.store( false );
-    tDispatcher = new std::thread( &MyPlayground::dispatcher, this );
+    tDispatcher = new std::thread( &RobotWorld::dispatcher, this );
     while( !tDispatcherRunning.load() )
         std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
 }
 
 // fin del juego
-void MyPlayground::stop()
+void RobotWorld::stop()
 {
     std::cout << ">> Finalizando despachador de conexiones" << std::endl;
     tDispatcherRunning.store( false );
@@ -356,7 +356,7 @@ void MyPlayground::stop()
 }
 
 // el manejador de conexiones
-void MyPlayground::dispatcher()
+void RobotWorld::dispatcher()
 {
     std::cout << ">> Esperando conexiones en " << std::flush;
     std::cout << inet_ntoa( srv_address.sin_addr ) << std::flush;
@@ -392,7 +392,7 @@ void MyPlayground::dispatcher()
         std::cout << std::endl;
 
         // procesamos esta conexion en otro hilo
-        threads.push_back( std::thread( &MyPlayground::TRobot, this, client ) );
+        threads.push_back( std::thread( &RobotWorld::TRobot, this, client ) );
 
         // quizas eliminar del vector de threads aquellos que ya no estan en ejecucion
     }
@@ -412,7 +412,7 @@ void MyPlayground::dispatcher()
 }
 
 // este es el hilo de un robot
-void MyPlayground::TRobot( int sock )
+void RobotWorld::TRobot( int sock )
 {
     // non blocking socket
     #ifdef WIN32

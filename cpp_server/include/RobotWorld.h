@@ -1,5 +1,5 @@
-#ifndef MYPLAYGROUND_H
-#define MYPLAYGROUND_H
+#ifndef ROBOTWORLD_H
+#define ROBOTWORLD_H
 
 #ifdef WIN32
     #include <winsock2.h>
@@ -22,7 +22,7 @@
 #include <enki/PhysicalEngine.h>
 #include <viewer/Viewer.h>
 
-class MyPlayground
+class RobotWorld
 {
     private:
         Enki::World* world;
@@ -34,8 +34,8 @@ class MyPlayground
         std::map<std::string, RobotBase*> robots;
 
     public:
-        MyPlayground( std::string );
-        ~MyPlayground();
+        RobotWorld( std::string );
+        ~RobotWorld();
         Enki::World* getWorld();
         double getWalls();
         void run();
@@ -46,4 +46,4 @@ class MyPlayground
         void TRobot( int );
 };
 
-#endif // MYPLAYGROUND_H
+#endif // ROBOTWORLD_H

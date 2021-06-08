@@ -1,6 +1,6 @@
 #include <QApplication>
 
-#include "MyPlayground.h"
+#include "RobotWorld.h"
 
 class Viewer : public Enki::ViewerWidget
 {
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
     // el únio parámetro debe ser el archivo world
     if( argc != 2 )
     {
-        std::cout << "Invocar como: MyPlayground archivo.world " << std::endl;
+        std::cout << "Invocar como: robworld archivo.world " << std::endl;
         return -1;
     }
 
@@ -44,10 +44,10 @@ int main(int argc, char* argv[])
     QApplication app( argc, argv );
 
     // preparamos el mundo segun el archivo world
-    MyPlayground* mpg;
+    RobotWorld* mpg;
     try
     {
-        mpg = new MyPlayground( argv[1] );
+        mpg = new RobotWorld( argv[1] );
     }
     catch( std::exception& e)
     {
@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
     }
 
     // preparamos la ventana de despliegue
-    Viewer* viewer = new Viewer( "MyPlayground", mpg->getWorld(), mpg->getWalls() );
+    Viewer* viewer = new Viewer( "Robot World", mpg->getWorld(), mpg->getWalls() );
 
     // show time
     viewer->show();
