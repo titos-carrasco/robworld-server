@@ -40,7 +40,7 @@ class TestLed():
                 for i in range(3,23): leds[ i ] = ledval
                 thymio.setLedsIntensity( leds )
                 ledval = 0 if ledval == 1 else 1
-                time.sleep( 0.01 )
+                time.sleep( 0.5 )
 
             thymio.close()
             epuck.close()

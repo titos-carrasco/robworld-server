@@ -1,9 +1,9 @@
 #ifdef WIN32
-    #define R_SHUT_RDWR SD_BOTH
+    #define R_SHUT_RDWR         SD_BOTH
 #else
-    #define R_SHUT_RDWR SHUT_RDWR
+    #define R_SHUT_RDWR         SHUT_RDWR
     #define closesocket( s )    close( s )
-#endif // WIN32
+#endif
 
 #include <thread>
 #include <chrono>
@@ -373,8 +373,6 @@ void RobotWorld::dispatcher()
     tDispatcherRunning.store( true );
     while( tDispatcherRunning.load() )
     {
-        std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
-
         // revisamos cada 1 segundo si hay actividad en el socket
         FD_ZERO( &readfds );
         FD_SET( srv_sock, &readfds );
@@ -414,13 +412,15 @@ void RobotWorld::dispatcher()
 // este es el hilo de un robot
 void RobotWorld::TRobot( int sock )
 {
-    // non blocking socket
+    // socket timeout
+    struct ::timeval timeout;
+    timeout.tv_sec = 1;
+    timeout.tv_usec = 0;
     #ifdef WIN32
-        u_long mode = 1;
-        ioctlsocket(sock, FIONBIO, &mode );
+    ::setsockopt( sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof( struct timeval ) );
     #else
-        ::fcntl( sock, F_SETFL, fcntl( sock, F_GETFL, 0) | O_NONBLOCK );
-    #endif // WIN32
+    ::setsockopt( sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof( struct timeval ) );
+    #endif
 
     char buff[128];
     char c;
@@ -428,8 +428,6 @@ void RobotWorld::TRobot( int sock )
     auto start = std::chrono::high_resolution_clock::now();
     while( i < sizeof( buff ) )
     {
-        std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
-
         // 4 segundos para recibir el nombre del robot a controlar
         auto end = std::chrono::high_resolution_clock::now();
         if( std::chrono::duration_cast<std::chrono::seconds>(end - start).count() >= 4 )
@@ -438,11 +436,7 @@ void RobotWorld::TRobot( int sock )
             break;
         }
 
-        #ifdef WIN32
-        int n = recv( sock, &c, 1, 0  );
-        #else
-        int n = read( sock, &c, 1 );
-        #endif
+        int n = recv( sock, &c, 1, 0 );
         if( n == 1 )
         {
             if( c == '\n' )
@@ -467,12 +461,11 @@ void RobotWorld::TRobot( int sock )
 
         if( n == 0 )
         {
-            std::cout << ">> Conexion abortada" << std::endl;
+            std::cout << ">> Conexion cerrada remotamente" << std::endl;
             break;
         }
-
         #ifdef WIN32
-        if( WSAGetLastError() == WSAEWOULDBLOCK ) continue;
+        if( WSAGetLastError() ==  WSAEAGAIN ) continue;
         #else
         if( errno == EAGAIN ) continue;
         #endif
@@ -481,7 +474,7 @@ void RobotWorld::TRobot( int sock )
         break;
     }
     if( i >= sizeof( buff ) )
-        std::cout << ">> Nombre de robot es invadlido" << std::endl;
+        std::cout << ">> Nombre de robot es invalido" << std::endl;
 
     // fin del hilo
     try { ::shutdown( sock, R_SHUT_RDWR ); }

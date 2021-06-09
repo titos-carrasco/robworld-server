@@ -21,31 +21,20 @@ RobotEPuck::~RobotEPuck()
 
 void RobotEPuck::getSensors( JSON& resp )
 {
-    RobotBase::mtx_enki.lock();
-
     resp["proximitySensorValues"] = myProximitySensorValues;
     resp["proximitySensorDistances"] = myProximitySensorDistances;
-
-    RobotBase::mtx_enki.unlock();
 }
 
 void RobotEPuck::setLeds( double* leds, int len )
 {
-    RobotBase::mtx_enki.lock();
-
     myRingLed = leds[0];
-
-    RobotBase::mtx_enki.unlock();
 }
 
 unsigned char* RobotEPuck::getCameraImage( unsigned int* len )
 {
-    RobotBase::mtx_enki.lock();
-
     *len = sizeof( myCameraImage )/sizeof( myCameraImage[0] );
     unsigned char *img = new unsigned char[*len];
     memcpy( img, myCameraImage, *len );
-    RobotBase::mtx_enki.unlock();
     return img;
 }
 
@@ -85,8 +74,9 @@ void RobotEPuck::controlStep( double dt )
         myCameraImage[n++] = int( c.a()*255 );
     }
 
+    RobotBase::myControlStep( this );
+
     RobotBase::mtx_enki.unlock();
 
-    RobotBase::myControlStep( this );
     EPuck::controlStep( dt );
 }

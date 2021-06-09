@@ -36,7 +36,7 @@ class TestEnjambre():
             while( time.time() - t < 30 ):
                 for r in robots:
                     r.setSpeed( random.uniform( -1000,1000 ), random.uniform( -1000,1000 ) )
-                time.sleep( 0.1 )
+                time.sleep( 2 )
             for r in robots:
                 r.setSpeed( 0, 0 )
                 r.close()

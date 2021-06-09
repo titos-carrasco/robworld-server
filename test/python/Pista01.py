@@ -57,9 +57,9 @@ class Thymio01( RobotThymio2 ):
         while(self.running ):
             self.getSensors()
             l, r = self.groundSensorValues
-            if( l >120):
+            if( l >200):
                 self.setSpeed( speed+5, speed )
-            elif( r>120 ):
+            elif( r>200 ):
                 self.setSpeed( speed, speed+5 )
             else:
                 self.setSpeed( speed, speed )
@@ -86,9 +86,9 @@ class Thymio02( RobotThymio2 ):
         while(self.running ):
             self.getSensors()
             l, r = self.groundSensorValues
-            if( l >120):
+            if( l >200):
                 self.setSpeed( speed+5, speed )
-            elif( r>120 ):
+            elif( r>200 ):
                 self.setSpeed( speed, speed+5 )
             else:
                 self.setSpeed( speed, speed )

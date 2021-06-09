@@ -21,23 +21,15 @@ RobotThymio2::~RobotThymio2()
 
 void RobotThymio2::getSensors( JSON& resp )
 {
-    RobotBase::mtx_enki.lock();
-
     resp["proximitySensorValues"] = myProximitySensorValues;
     resp["proximitySensorDistances"] = myProximitySensorDistances;
     resp["groundSensorValues"] = myGroundSensorValues;
-
-    RobotBase::mtx_enki.unlock();
 }
 
 void RobotThymio2::setLeds( double* leds, int nleds )
 {
-    RobotBase::mtx_enki.lock();
-
     for( int led=0; led < int( sizeof( myLeds )/sizeof( myLeds[0] ) ) && led < nleds; led++ )
         myLeds[led] = leds[led];
-
-    RobotBase::mtx_enki.unlock();
 }
 
 unsigned char* RobotThymio2::getCameraImage( unsigned int* len )
@@ -74,8 +66,9 @@ void RobotThymio2::controlStep( double dt )
     myGroundSensorValues[0] = Thymio2::groundSensor0.getValue();
     myGroundSensorValues[1] = Thymio2::groundSensor1.getValue();
 
+    RobotBase::myControlStep( this );
+
     RobotBase::mtx_enki.unlock();
 
-    RobotBase::myControlStep( this );
     Thymio2::controlStep( dt );
 }

@@ -44,9 +44,9 @@ class TestSumo():
                 gr = rob.groundSensorValues[1]
                 if( gl < 200 or gr < 200 ):
                     rob.setSpeed( -speed, -speed )
-                    time.sleep( 2 )
+                    time.sleep( 1 )
                     rob.setSpeed( -speed, speed )
-                    time.sleep( 2 )
+                    time.sleep( 1 )
                     rob.setSpeed( speed, speed )
                 time.sleep( 0.001 )
             rob.setSpeed( 0, 0 )

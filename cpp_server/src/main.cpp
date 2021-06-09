@@ -51,28 +51,36 @@ int main(int argc, char* argv[])
     }
     catch( std::exception& e)
     {
-        std::cout << ">> ";
+        std::cout << ">> " << std::flush;
         std::cout << e.what() << std::endl;
-        exit( -1 );
+        return -1;
     }
     catch( ... )
     {
         std::cout << ">> No se pudo configurar el 'mundo'" << std::endl;
-        exit( -1 );
+        return -1;
     }
 
     // preparamos la ventana de despliegue
     Viewer* viewer = new Viewer( "Robot World", mpg->getWorld(), mpg->getWalls() );
 
     // show time
-    viewer->show();
-    mpg->run();
-    int exit_code = app.exec();
+    int exit_code = -1;
+    try
+    {
+        viewer->show();
+        mpg->run();
+        exit_code = app.exec();
 
-    // eso es todo
-    mpg->stop();
-    delete mpg;
-    //delete viewer;        // Segmentation fault
+        // eso es todo
+        mpg->stop();
+        delete mpg;
+        //delete viewer;        // Segmentation fault
+    }catch( ... )
+    {
+        std::cout << ">> Ooops, esto no deberia haber pasado!!!" << std::endl;
+    }
+
 
     std::cout << ">> Hasta la vista" << std::endl;
     return exit_code;

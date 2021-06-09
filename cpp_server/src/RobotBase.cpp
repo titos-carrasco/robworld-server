@@ -1,12 +1,16 @@
 #include <chrono>
 
+#ifdef WIN32
+#define MSG_NOSIGNAL    0
+#endif
+
 #include "RobotBase.h"
 
 RobotBase::RobotBase( std::string _name, std::string _tipo ) :
     running( false ), mtx(), mypos{ .0, .0 }, myspeed{ .0, .0 },
     mtx_enki(), name(_name), tipo( _tipo )
 {
-    std::cout << ">> Construyendo base para el robot '";
+    std::cout << ">> Construyendo base para el robot '" << std::flush;
     std::cout << name << std::flush;
     std::cout << "'" << std::endl;
     //running.store( false );
@@ -14,7 +18,7 @@ RobotBase::RobotBase( std::string _name, std::string _tipo ) :
 
 RobotBase::~RobotBase()
 {
-    std::cout << ">> Destruyendo base del robot '";
+    std::cout << ">> Destruyendo base del robot '" << std::flush;
     std::cout << name << std::flush;
     std::cout << "'" << std::endl;
 }
@@ -40,8 +44,6 @@ void RobotBase::run( int sock )
     std::cout << "' ejecutando" << std::endl;
     while( running.load() )
     {
-        std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
-
         // leemos la línea y verificamos la conexión
         std::string* linea;
         int n = readline( sock, &linea );
@@ -62,9 +64,11 @@ void RobotBase::run( int sock )
         JSON resp = "{}"_json;
         if( cmd.compare( "getSensors") == 0 )
         {
+            mtx_enki.lock();
             resp["pos"] = mypos;
             resp["speed"] = myspeed;
             getSensors( resp );
+            mtx_enki.unlock();
         }
         else if( cmd.compare( "setSpeed") == 0 )
         {
@@ -84,7 +88,9 @@ void RobotBase::run( int sock )
             try
             {
                 double st = json["estado"];
+                mtx_enki.lock();
                 setLeds( &st, 1 );
+                mtx_enki.unlock();
             }
             catch( ... ){ break; }
         }
@@ -94,14 +100,18 @@ void RobotBase::run( int sock )
             {
                 std::vector<double> leds = json["leds"];
                 unsigned int n = leds.size();
+                mtx_enki.lock();
                 setLeds( &leds[0], n );
+                mtx_enki.unlock();
             }
             catch( ... ){ break; }
         }
         else if( cmd.compare( "getCameraImage") == 0 )
         {
             unsigned int len = 0;
+            mtx_enki.lock();
             unsigned char* cameraImage = getCameraImage( &len );
+            mtx_enki.unlock();
             sendbytes( sock, cameraImage, len );
             if( cameraImage != NULL ) delete cameraImage;
             continue;
@@ -132,10 +142,6 @@ void RobotBase::stop()
 
 void RobotBase::myControlStep( Enki::DifferentialWheeled* o )
 {
-    std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
-
-    mtx_enki.lock();
-
     // hacia el robot
     o->leftSpeed = myspeed[0];
     o->rightSpeed = myspeed[1];
@@ -144,7 +150,6 @@ void RobotBase::myControlStep( Enki::DifferentialWheeled* o )
     mypos[0] = o->pos.x;
     mypos[1] = o->pos.y;
 
-    mtx_enki.unlock();
 }
 
 int RobotBase::readline( int sock, std::string** linea )
@@ -155,17 +160,11 @@ int RobotBase::readline( int sock, std::string** linea )
     auto start = std::chrono::high_resolution_clock::now();
     while( i < sizeof( buff ) )
     {
-        std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
-
         // si no ha llegado nada en los ultimos X segundos retornamos
         auto end = std::chrono::high_resolution_clock::now();
         if( std::chrono::duration_cast<std::chrono::seconds>(end - start).count() >= 1 ) return -i;
 
-        #ifdef WIN32
         int n = recv( sock, &c, 1, 0 );
-        #else
-        int n = read( sock, &c, 1 );
-        #endif
         if( n == 1 )
         {
             if( c == '\n' )
@@ -179,11 +178,13 @@ int RobotBase::readline( int sock, std::string** linea )
             continue;
         }
         if( n == 0 ) break;
+
         #ifdef WIN32
-        if( WSAGetLastError() == WSAEWOULDBLOCK ) continue;
+        if( WSAGetLastError() ==  WSAEAGAIN ) continue;
         #else
         if( errno == EAGAIN ) continue;
         #endif
+
         break;
     }
     return -1;
@@ -197,11 +198,7 @@ bool RobotBase::sendline( int sock, std::string text )
     int l = t.length();
     while( i < l )
     {
-        #ifdef WIN32
-        int n = send( sock, buff + i, 1, 0 );
-        #else
-        int n = write( sock, buff + i, 1 );
-        #endif
+        int n = send( sock, buff + i, 1, MSG_NOSIGNAL );
         if( n <= 0) return false;
         i += n;
     }
@@ -223,11 +220,7 @@ bool RobotBase::sendbytes( int sock, unsigned char* data, unsigned int len )
     len = 4 + len;
     while( i < len )
     {
-        #ifdef WIN32
-        int n = send( sock, buff + i, 1, 0 );
-        #else
-        int n = write( sock, buff + i, 1 );
-        #endif
+        int n = send( sock, buff + i, 1, MSG_NOSIGNAL );
         if( n <= 0) return false;
         i += n;
     }

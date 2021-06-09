@@ -9,7 +9,7 @@
     #include <netinet/in.h>
     #include <arpa/inet.h>
     #include <unistd.h>
-#endif // WIN32
+#endif
 
 #include <iostream>
 #include <thread>
