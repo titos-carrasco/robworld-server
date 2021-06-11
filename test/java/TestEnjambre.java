@@ -21,14 +21,16 @@ public class TestEnjambre {
 
             // Loop clasico
             long t = System.currentTimeMillis() / 1000;
-            while( System.currentTimeMillis() / 1000 - t < 5 ) {
+            while( System.currentTimeMillis() / 1000 - t < 20 ) {
                 for(int i=0; i<36; i++ )
                     robots[i].setSpeed( random.nextInt(2000)-1000, random.nextInt(2000)-1000 );
                 Thread.sleep( 2000 );
             }
 
-            for(int i= 0; i<36; i++ )
+            for(int i= 0; i<36; i++ ) {
+                robots[i].setSpeed( 0, 0 );
                 robots[i].close();
+            }
         }
         catch( Exception e ) {
             System.out.println( e );

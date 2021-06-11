@@ -22,10 +22,9 @@ public class RobotBase {
     private Socket sock;
     protected PrintWriter out;
     protected BufferedReader in;
+
     private double[] pos = null;
     private double[] speed = null;
-    private double[] proximitySensorValues = null;
-    private double[] proximitySensorDistances = null;
 
     public RobotBase( String name, String host, int port, String tipo ) throws Exception {
         this.host = host;
@@ -43,7 +42,7 @@ public class RobotBase {
         out.print( '\n' );
         out.flush();
 
-        // si es aceptado nos envia el tipo de robot
+        // si es aceptado nos envia el tipo de robot que somos
         String el_tipo = in.readLine();
         if( !this.tipo.equals( el_tipo ) )
             throw new Exception( "Robot no aceptado" );
@@ -73,14 +72,6 @@ public class RobotBase {
         return speed;
     }
 
-    public double[]  getProximitySensorValues() {
-        return proximitySensorValues;
-    }
-
-    public double[]  getProximitySensorDistances() {
-        return proximitySensorDistances;
-    }
-
     public void setSpeed( int leftSpeed, int rightSpeed ) throws Exception {
         JsonObject jobj = Json.createObjectBuilder()
             .add( "cmd", "setSpeed" )
@@ -98,15 +89,13 @@ public class RobotBase {
 
         String resp = sendCommand( jobj, true );
         JsonReader jsonReader = Json.createReader( new StringReader( resp ) );
-        JsonObject jobj_in = jsonReader.readObject();
+        JsonObject json = jsonReader.readObject();
         jsonReader.close();
 
-        speed = getDoubleArray( jobj_in.getJsonArray( "speed" ) );
-        pos = getDoubleArray( jobj_in.getJsonArray( "pos" ) );
-        proximitySensorValues = getDoubleArray( jobj_in.getJsonArray( "proximitySensorValues" ) );
-        proximitySensorDistances = getDoubleArray( jobj_in.getJsonArray( "proximitySensorDistances" ) );
+        speed = getDoubleArray( json.getJsonArray( "speed" ) );
+        pos = getDoubleArray( json.getJsonArray( "pos" ) );
 
-        return jobj_in;
+        return json;
     }
 
     protected String sendCommand( JsonObject jobj, boolean response ) throws Exception {

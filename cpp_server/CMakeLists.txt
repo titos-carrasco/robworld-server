@@ -38,6 +38,7 @@ add_executable( ${PROJECT_NAME}
     src/RobotBase.cpp
     src/RobotEPuck.cpp
     src/RobotThymio2.cpp
+    src/RobotMarxbot.cpp
 )
 
 set( EXECUTABLE_OUTPUT_PATH "bin" )
@@ -49,8 +50,8 @@ if(WIN32)
     )
 
     target_link_libraries( ${PROJECT_NAME} PUBLIC
-        C:/Users/titos/Documents/Software/enki/build/enki/libenki.a
-        C:/Users/titos/Documents/Software/enki/build/viewer/libenkiviewer.a
+        C:/Users/titos/Documents/Software/enki/build${X}/enki/libenki.a
+        C:/Users/titos/Documents/Software/enki/build${X}/viewer/libenkiviewer.a
         Qt5::Core Qt5::Gui Qt5::Widgets Qt5::OpenGL
         ${OPENGL_LIBRARIES}
         Threads::Threads

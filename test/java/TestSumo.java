@@ -19,7 +19,7 @@ public class TestSumo {
 
             // Loop clasico
             long t = System.currentTimeMillis() / 1000;
-            while( System.currentTimeMillis() / 1000 - t < 15 ) {
+            while( System.currentTimeMillis() / 1000 - t < 20 ) {
                 rob.getSensors();
 
                 System.out.print( "pos: " );

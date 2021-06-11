@@ -2,6 +2,7 @@ import robworld
 import robworld.RobotBase
 import robworld.RobotEPuck
 import robworld.RobotThymio2
+import robworld.RobotMarxbot
 
 
 class TestHelp():
@@ -14,6 +15,7 @@ class TestHelp():
         help( robworld.RobotBase )
         help( robworld.RobotEPuck )
         help( robworld.RobotThymio2 )
+        help( robworld.RobotMarxbot )
 
 
 # show time

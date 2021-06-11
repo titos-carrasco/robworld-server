@@ -40,7 +40,7 @@ class TestCamera():
 
             # Loop clasico
             t = time.time()
-            while( time.time() - t < 5 ):
+            while( time.time() - t < 20 ):
                 # requerido por pygame
                 for e in pygame.event.get(): pass
 

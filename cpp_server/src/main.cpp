@@ -24,6 +24,7 @@ class Viewer : public Enki::ViewerWidget
             // para desplegar la "piel" de los robots
             managedObjectsAliases[&typeid(RobotEPuck)] = &typeid(Enki::EPuck);
             managedObjectsAliases[&typeid(RobotThymio2)] = &typeid(Enki::Thymio2);
+            managedObjectsAliases[&typeid(RobotMarxbot)] = &typeid(Enki::Marxbot);
         }
 
         ~Viewer()

@@ -6,6 +6,8 @@ import java.util.List;
 import javax.json.*;
 
 public class RobotEPuck extends RobotBase {
+    private double[] proximitySensorValues = null;
+    private double[] proximitySensorDistances = null;
 
     public RobotEPuck( String name, String host, int port ) throws Exception {
         super( name, host, port, "epuck" );
@@ -22,6 +24,17 @@ public class RobotEPuck extends RobotBase {
 
     public void getSensors() throws Exception {
         JsonObject json = retrieveSensors();
+
+        proximitySensorValues = getDoubleArray( json.getJsonArray( "proximitySensorValues" ) );
+        proximitySensorDistances = getDoubleArray( json.getJsonArray( "proximitySensorDistances" ) );
+    }
+
+    public double[]  getProximitySensorValues() {
+        return proximitySensorValues;
+    }
+
+    public double[]  getProximitySensorDistances() {
+        return proximitySensorDistances;
     }
 
     public List<int[]> getCameraImage() throws Exception {

@@ -20,8 +20,6 @@ class RobotBase():
 
         self.pos = None
         self.speed = None
-        self.proximitySensorValues = None
-        self.proximitySensorDistances = None
 
         self.connect( name, host, port )
 
@@ -69,8 +67,6 @@ class RobotBase():
         resp = self.sendPkg( pkg )
         self.pos = tuple( resp["pos"] )
         self.speed = tuple( resp["speed"]  )
-        self.proximitySensorValues = tuple( resp["proximitySensorValues"] )
-        self.proximitySensorDistances = tuple( resp["proximitySensorDistances"] )
         return resp
 
     def connect(self, name:str, host:str, port:int ):

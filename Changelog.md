@@ -1,5 +1,13 @@
 # ChangeLog
 
+## @v1.0.1 2021-06-11
+
+### Added
+- Agregar robot tipo MarxBot
+
+### Fixed
+- Corrige timeout en socket
+
 ## @@ - 2021-06-09
 
 ### Fixed

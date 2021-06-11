@@ -20,7 +20,7 @@ public class TestLed {
 
             // Loop clasico
             long t = System.currentTimeMillis() / 1000;
-            while( System.currentTimeMillis() / 1000 - t < 5 ) {
+            while( System.currentTimeMillis() / 1000 - t < 20 ) {
                 for( int i=3; i<23; i++ )
                     leds[i] = status;
                 thymio.setLedsIntensity( leds );

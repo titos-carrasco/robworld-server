@@ -298,6 +298,41 @@ RobotWorld::RobotWorld( std::string world_file_name ) :
             continue;
         }
 
+        if( type.compare( "marxbot" ) == 0 )
+        {
+            if( world == NULL )
+                throw std::runtime_error( "Definicion del mundo no encontrada" );
+
+            if( entry.find( "name" )  == entry.end() ||
+                entry.find( "x" )     == entry.end() ||
+                entry.find( "y" )     == entry.end() )
+            {
+                std::cout << ">> Definicion de 'Marxbot' invalida: " << std::endl;
+                std::cout << entry << std::endl;
+            }
+            else
+            {
+                std:: string name = entry["name"];
+                double x = entry["x"];
+                double y = entry["y"];
+
+                try{
+                    robots.at( name );
+                    std::cout << ">> Robot con este nombre ya existe: " << std::endl;
+                    std::cout << entry << std::endl;
+                }
+                catch( const std::out_of_range& err )
+                {
+                    RobotMarxbot *r = new RobotMarxbot( name );
+                    r->pos = Enki::Point( x, y );
+                    r->angle = entry.find( "angle" ) == entry.end() ? .0 : (double)entry["angle"]*(M_PI/180.0);
+                    world->addObject( r );
+                    robots[ name ] = r;
+                }
+            }
+            continue;
+        }
+
         std::cout << ">> Linea no reconocida: " << std::endl;
         std::cout << entry << std::endl;
     }
@@ -465,7 +500,7 @@ void RobotWorld::TRobot( int sock )
             break;
         }
         #ifdef WIN32
-        if( WSAGetLastError() ==  WSAEAGAIN ) continue;
+        if( WSAGetLastError() ==  WSAETIMEDOUT ) continue;
         #else
         if( errno == EAGAIN ) continue;
         #endif

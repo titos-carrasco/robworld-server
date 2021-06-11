@@ -180,7 +180,7 @@ int RobotBase::readline( int sock, std::string** linea )
         if( n == 0 ) break;
 
         #ifdef WIN32
-        if( WSAGetLastError() ==  WSAEAGAIN ) continue;
+        if( WSAGetLastError() ==  WSAETIMEDOUT ) continue;
         #else
         if( errno == EAGAIN ) continue;
         #endif

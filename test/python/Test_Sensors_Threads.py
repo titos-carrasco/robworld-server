@@ -75,7 +75,7 @@ class MyThymio2( RobotThymio2 ):
         super().__init__( name, host, port )
         self.running = False
         self.me = None
-        self.s = 20
+        self.s = 10
 
     def run( self ):
         self.me = threading.current_thread()

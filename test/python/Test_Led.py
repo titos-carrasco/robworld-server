@@ -35,7 +35,7 @@ class TestLed():
             # Loop clasico
             t = time.time()
             ledval = 0
-            while( time.time() - t < 5 ):
+            while( time.time() - t < 20 ):
                 epuck.setLedRing( ledval )
                 for i in range(3,23): leds[ i ] = ledval
                 thymio.setLedsIntensity( leds )

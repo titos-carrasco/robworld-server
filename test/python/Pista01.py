@@ -32,7 +32,7 @@ class Pista01():
 
         # loop clasico
         t = time.time()
-        while( time.time() - t < 10 ):
+        while( time.time() - t < 20 ):
             time.sleep( 0.0001 )
 
         # detenemos los robots

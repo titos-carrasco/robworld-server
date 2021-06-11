@@ -18,6 +18,7 @@
 
 #include "RobotThymio2.h"
 #include "RobotEPuck.h"
+#include "RobotMarxbot.h"
 
 #include <enki/PhysicalEngine.h>
 #include <viewer/Viewer.h>

@@ -31,7 +31,7 @@ class TestSumo():
 
             # Loop clasico
             t = time.time()
-            while( time.time() - t < 15 ):
+            while( time.time() - t < 20 ):
                 rob.getSensors()
 
                 print( "pos:", rob.pos )

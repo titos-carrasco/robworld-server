@@ -21,7 +21,7 @@ public class TestServerClient {
 
             // Loop clasico
             long t = System.currentTimeMillis() / 1000;
-            while( System.currentTimeMillis() / 1000 - t < 15 ) {
+            while( System.currentTimeMillis() / 1000 - t < 20 ) {
                 rob01.setSpeed( random.nextInt(2000)-1000, random.nextInt(2000)-1000 );
                 rob02.setSpeed( random.nextInt(2000)-1000, random.nextInt(2000)-1000 );
 

@@ -55,7 +55,7 @@ public class TestCamera extends JPanel {
 
             // Loop clasico
             long t = System.currentTimeMillis() / 1000;
-            while( System.currentTimeMillis() / 1000 - t < 15 ) {
+            while( System.currentTimeMillis() / 1000 - t < 20 ) {
                 imagen = epuck.getCameraImage();
                 repaint();
                 Thread.sleep( 1 );

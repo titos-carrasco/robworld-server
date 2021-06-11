@@ -21,6 +21,8 @@ class RobotEPuck( RobotBase.RobotBase ):
         Actualiza el valor de los sensores del robot
         """
         resp = super().getSensors()
+        self.proximitySensorValues = tuple( resp["proximitySensorValues"] )
+        self.proximitySensorDistances = tuple( resp["proximitySensorDistances"] )
 
     def setLedRing( self, on_off:bool ):
         """

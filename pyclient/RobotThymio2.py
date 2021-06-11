@@ -21,6 +21,8 @@ class RobotThymio2( RobotBase.RobotBase ):
         Actualiza el valor de los sensores del robot
         """
         resp = super().getSensors()
+        self.proximitySensorValues = tuple( resp["proximitySensorValues"] )
+        self.proximitySensorDistances = tuple( resp["proximitySensorDistances"] )
         self.groundSensorValues = tuple( resp["groundSensorValues"] )
 
     def setLedsIntensity( self, leds:list ):

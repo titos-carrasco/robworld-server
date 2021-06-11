@@ -31,7 +31,7 @@ class TestServerClient():
 
             # loop clasico
             t = time.time()
-            while( time.time() - t < 5 ):
+            while( time.time() - t < 20 ):
                 rob01.setSpeed( random.uniform(-100,100), random.uniform(-100,100) )
                 rob02.setSpeed( random.uniform(-100,1000), random.uniform(-100,100) )
 
