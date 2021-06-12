@@ -55,6 +55,7 @@ if(WIN32)
         Qt5::Core Qt5::Gui Qt5::Widgets Qt5::OpenGL
         ${OPENGL_LIBRARIES}
         Threads::Threads
+        jsoncpp
         wsock32
     )
 else()
@@ -69,5 +70,6 @@ else()
         Qt5::Core Qt5::Gui Qt5::Widgets Qt5::OpenGL
         ${OPENGL_LIBRARIES}
         Threads::Threads
+        jsoncpp
     )
 endif()

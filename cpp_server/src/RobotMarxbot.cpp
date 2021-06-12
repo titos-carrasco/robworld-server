@@ -16,9 +16,10 @@ RobotMarxbot::~RobotMarxbot()
     std::cout << "'" << std::endl;
 }
 
-void RobotMarxbot::getSensors( JSON& resp )
+void RobotMarxbot::getSensors( Json::Value& resp )
 {
-    resp["virtualBumpers"] = myVirtualBumpers;
+    resp["virtualBumpers"] = Json::arrayValue;
+    for( unsigned int i = 0; i<sizeof(myVirtualBumpers)/sizeof(myVirtualBumpers[0]); i++ ) resp["virtualBumpers"].append( myVirtualBumpers[i] );
 }
 
 void RobotMarxbot::setLeds( double* leds, int nleds )
@@ -28,7 +29,7 @@ void RobotMarxbot::setLeds( double* leds, int nleds )
 unsigned char* RobotMarxbot::getCameraImage( unsigned int* len )
 {
     *len = 0;
-    return NULL;
+    return nullptr;
 }
 
 void RobotMarxbot::controlStep( double dt )

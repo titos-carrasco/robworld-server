@@ -39,34 +39,38 @@ void RobotBase::run( int sock )
 
     // show time
     running.store( true );
+    Json::Value json;
+    Json::StreamWriterBuilder jwbuilder;
+    jwbuilder["indentation"] = "";
+
     std::cout << ">> Robot '" << std::flush;
     std::cout << name << std::flush;
     std::cout << "' ejecutando" << std::endl;
     while( running.load() )
     {
         // leemos la línea y verificamos la conexión
-        std::string* linea;
-        int n = readline( sock, &linea );
+        int n = readline( sock );
         if( n == 0 ) continue;
         if( n < 0 ) break;
 
         // la línea debe venir en formato JSON
-        JSON json = JSON::parse( *linea, nullptr, false, false );
-        delete linea;
-        if( json.is_discarded() ) break;
-
-        // obtenemos el nombre del comando
-        std::string cmd;
-        try{ cmd = json["cmd"]; }
+        try { std::stringstream( in_buffer ) >> json; }
         catch( ... ){ break; }
 
         // procesamos el comando
-        JSON resp = "{}"_json;
+        std::string cmd = json.get( "cmd", "_UNDEF_" ).asString();
+        Json::Value resp;
+        //std::stringstream( "{}" ) >> resp;
         if( cmd.compare( "getSensors") == 0 )
         {
             mtx_enki.lock();
-            resp["pos"] = mypos;
-            resp["speed"] = myspeed;
+
+            resp["pos"] = Json::arrayValue;
+            for( unsigned int i = 0; i<sizeof(mypos)/sizeof(mypos[0]); i++ ) resp["pos"].append( mypos[i] );
+
+            resp["speed"] = Json::arrayValue;
+            for( unsigned int i = 0; i<sizeof(myspeed)/sizeof(myspeed[0]); i++ ) resp["speed"].append( myspeed[i] );
+
             getSensors( resp );
             mtx_enki.unlock();
         }
@@ -74,8 +78,8 @@ void RobotBase::run( int sock )
         {
             try
             {
-                double ls = json["leftSpeed"];
-                double rs = json["rightSpeed"];
+                double ls = json.get( "leftSpeed", .0 ).asDouble();
+                double rs = json.get( "rightSpeed", .0 ).asDouble();
                 mtx_enki.lock();
                 myspeed[0] = ls;
                 myspeed[1] = rs;
@@ -87,7 +91,7 @@ void RobotBase::run( int sock )
         {
             try
             {
-                double st = json["estado"];
+                double st = json.get( "estado", .0 ).asDouble();
                 mtx_enki.lock();
                 setLeds( &st, 1 );
                 mtx_enki.unlock();
@@ -98,8 +102,11 @@ void RobotBase::run( int sock )
         {
             try
             {
-                std::vector<double> leds = json["leds"];
-                unsigned int n = leds.size();
+                Json::Value jleds = json["leds"];
+                unsigned int n = jleds.size();
+                std::vector<double> leds;
+                for( unsigned int i=0; i<n; i++ ) leds.push_back( jleds[i].asDouble() );
+
                 mtx_enki.lock();
                 setLeds( &leds[0], n );
                 mtx_enki.unlock();
@@ -112,8 +119,10 @@ void RobotBase::run( int sock )
             mtx_enki.lock();
             unsigned char* cameraImage = getCameraImage( &len );
             mtx_enki.unlock();
+
+            if( cameraImage == nullptr ) break;
             sendbytes( sock, cameraImage, len );
-            if( cameraImage != NULL ) delete cameraImage;
+            delete cameraImage;
             continue;
         }
         else
@@ -122,7 +131,7 @@ void RobotBase::run( int sock )
         }
 
         // enviamos la respuesta
-        sendline( sock, resp.dump() );
+        sendline( sock, Json::writeString( jwbuilder, resp ) );
     }
 
     // esto es todo
@@ -152,13 +161,12 @@ void RobotBase::myControlStep( Enki::DifferentialWheeled* o )
 
 }
 
-int RobotBase::readline( int sock, std::string** linea )
+int RobotBase::readline( int sock )
 {
-    char buff[256];
     char c;
     unsigned int i = 0;
     auto start = std::chrono::high_resolution_clock::now();
-    while( i < sizeof( buff ) )
+    while( i < sizeof( in_buffer )/sizeof( in_buffer[0] ) )
     {
         // si no ha llegado nada en los ultimos X segundos retornamos
         auto end = std::chrono::high_resolution_clock::now();
@@ -169,11 +177,12 @@ int RobotBase::readline( int sock, std::string** linea )
         {
             if( c == '\n' )
             {
-                buff[i]='\0';
-                if( i > 0 ) *linea = new std::string( buff );
+                if( i == 0 ) break;
+
+                in_buffer[i]='\0';
                 return i;
             }
-            buff[i++] = c;
+            in_buffer[i++] = c;
             start = std::chrono::high_resolution_clock::now();
             continue;
         }
@@ -208,7 +217,8 @@ bool RobotBase::sendline( int sock, std::string text )
 bool RobotBase::sendbytes( int sock, unsigned char* data, unsigned int len )
 {
     // los primeros 4 bytes serán el largo (BIG ENDIAN) de la data
-    char buff[ 4 + len ];
+    //char buff[ 4 + len ];
+    char buff[512*3];
     buff[0] = 0;
     buff[1] = ( len & 0x00FF0000 ) >> 16;
     buff[2] = ( len & 0x0000FF00 ) >> 8;

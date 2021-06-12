@@ -12,7 +12,7 @@ class RobotMarxbot : public RobotBase, public Enki::Marxbot
         RobotMarxbot( std::string );
         ~RobotMarxbot();
         virtual void controlStep( double dt );
-        virtual void getSensors( JSON& resp );
+        virtual void getSensors( Json::Value& resp );
         virtual void setLeds( double*, int );
         virtual unsigned char* getCameraImage( unsigned int* );
 

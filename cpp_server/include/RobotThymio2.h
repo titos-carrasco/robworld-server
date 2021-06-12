@@ -12,7 +12,7 @@ class RobotThymio2 : public RobotBase, public Enki::Thymio2
         RobotThymio2( std::string );
         ~RobotThymio2();
         virtual void controlStep( double dt );
-        virtual void getSensors( JSON& resp );
+        virtual void getSensors( Json::Value& resp );
         virtual void setLeds( double*, int );
         virtual unsigned char* getCameraImage( unsigned int* );
 

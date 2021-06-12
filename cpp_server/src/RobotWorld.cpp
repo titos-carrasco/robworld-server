@@ -12,13 +12,14 @@
 #include <fstream>
 #include <fcntl.h>
 
-#include <json.hpp>
+#include <jsoncpp/json/json.h>
+#include <jsoncpp/json/writer.h>
+
 #include "RobotWorld.h"
 
-using JSON = nlohmann::json;
 
 RobotWorld::RobotWorld( std::string world_file_name ) :
-    world( NULL ), walls( 10 )
+    world( nullptr ), walls( 10 )
 {
     // creamos el socket
     std::cout << ">> Configurando socket" << std::endl;
@@ -47,9 +48,9 @@ RobotWorld::RobotWorld( std::string world_file_name ) :
 
     // leemos el archivo del mundo que está en formato JSON
     std::cout << ">> Leyendo archivo 'world'" << std::endl;
+    Json::Value json;
 
     std::ifstream fs( world_file_name );
-    JSON json;
     fs >> json;
     fs.close();
 
@@ -57,37 +58,37 @@ RobotWorld::RobotWorld( std::string world_file_name ) :
     std::cout << ">> Creando el mundo" << std::endl;
 
     std::map<std::string, Enki::Color> colors;
-    for( auto& elem : json.items() )
+    for( auto& entry : json )
     {
         // necesitamos el tipo de elemento a crear
-        auto& entry = elem.value();
-        if( entry.find( "type" ) == entry.end() )
+        std::string type = entry.get( "type", "_UNDEF_" ).asString();
+        if( type.compare( "_UNDEF_" ) == 0 )
         {
             std::cout << ">> No especifica 'type': " << std::endl;
             std::cout << entry << std::endl;
             continue;
         }
-        std::string type = entry["type"];
 
         // colores
         if( type.compare( "color" ) == 0 )
         {
-            if( entry.find( "name" ) == entry.end() ||
-                entry.find( "r" )    == entry.end() ||
-                entry.find( "g" )    == entry.end() ||
-                entry.find( "b" )    == entry.end() ||
-                entry.find( "a" )    == entry.end() )
+            std::string name = entry.get( "name", "_UNDEF_" ).asString();
+            double r = entry.get( "r", -1 ).asInt();
+            double g = entry.get( "g", -1 ).asInt();
+            double b = entry.get( "b", -1 ).asInt();
+            double a = entry.get( "a", -1 ).asInt();
+
+            if( name.compare( "_UNDEF_" ) == 0 ||
+                ( r < 0 || r > 255 ) ||
+                ( g < 0 || g > 255 ) ||
+                ( b < 0 || b > 255 ) ||
+                ( a < 0 || a > 255 ) )
             {
                 std::cout << ">> Definicion de 'color' invalida: " << std::endl;
                 std::cout << entry << std::endl;
             }
             else
             {
-                std::string name = entry["name"];
-                double r = entry["r"];
-                double g = entry["g"];
-                double b = entry["b"];
-                double a = entry["a"];
 
                 colors[ name ] = Enki::Color( r/255., g/255., b/255, a/255. );
             }
@@ -97,31 +98,33 @@ RobotWorld::RobotWorld( std::string world_file_name ) :
         // el mundo
         if( type.compare( "world" ) == 0 )
         {
-            if( world != NULL )
+            if( world != nullptr )
             {
                 std::cout << ">> Definicion de 'world' ya existe: " << std::endl;
                 std::cout << entry << std::endl;
                 continue;
             }
 
-            if( entry.find( "width" )  == entry.end() ||
-                entry.find( "height" ) == entry.end() ||
-                entry.find( "walls" )  == entry.end() ||
-                entry.find( "color" )  == entry.end() ||
-                entry.find( "ground" ) == entry.end() ||
-                entry.find( "host" )   == entry.end() ||
-                entry.find( "port" )   == entry.end() )
+            double width = entry.get( "width", -1 ).asDouble();
+            double height = entry.get( "height", -1 ).asDouble();
+            walls = entry.get( "walls", -1 ).asDouble();
+            std::string color = entry.get( "color", "_UNDEF_" ).asString();
+            std::string ground = entry.get( "ground", "_UNDEF_" ).asString();
+            std::string host = entry.get( "host", "_UNDEF_" ).asString();
+            int port = entry.get( "port", -1 ).asInt() ;
+
+            if( width <= 0 ||
+                height <= 0 ||
+                walls < 0 ||
+                color.compare( "_UNDEF_" ) == 0 ||
+                ground.compare( "_UNDEF_" ) == 0 ||
+                host.compare( "_UNDEF_" ) == 0 ||
+                port <= 0 )
             {
+                std::cout << entry << std::endl;
                 throw std::runtime_error( "Definicion del mundo es invalida" );
             }
 
-            double width = entry["width"];
-            double height = entry["height"];
-            walls = entry["walls"];
-            std::string ground = entry["ground"];
-            std::string color = entry["color"];
-            std::string host = entry["host"];
-            int port = entry["port"];
 
             Enki::World::GroundTexture gt;
             if( ground.length() > 0 )
@@ -157,35 +160,36 @@ RobotWorld::RobotWorld( std::string world_file_name ) :
         // cajas
         if( type.compare( "box" ) == 0 )
         {
-            if( world == NULL )
+            if( world == nullptr )
                 throw std::runtime_error( "Definicion del mundo no encontrada" );
 
-            if( entry.find( "x" )      == entry.end() ||
-                entry.find( "y" )      == entry.end() ||
-                entry.find( "l1" )     == entry.end() ||
-                entry.find( "l2" )     == entry.end() ||
-                entry.find( "height" ) == entry.end() ||
-                entry.find( "mass" )   == entry.end() ||
-                entry.find( "color" )  == entry.end() )
+            double x = entry.get( "x", -1 ).asDouble();
+            double y = entry.get( "y", -1 ).asDouble();
+            double l1 = entry.get( "l1", -1 ).asDouble();
+            double l2 = entry.get( "l2", -1 ).asDouble();
+            double height = entry.get( "height", -1 ).asDouble();
+            double mass = entry.get( "mass", -2 ).asDouble();
+            std::string color = entry.get( "color", "_UNDEF_" ).asString();
+
+            if( x < 0 ||
+                y < 0 ||
+                l1 <= 0 ||
+                l2 <= 0 ||
+                height <= 0 ||
+                mass <= -2 ||
+                color.compare( "_UNDEF_" ) == 0 )
             {
                 std::cout << ">> Definicion de 'box' invalida: " << std::endl;
                 std::cout << entry << std::endl;
             }
             else
             {
-                double x = entry["x"];
-                double y = entry["y"];
-                double l1 = entry["l1"];
-                double l2 = entry["l2"];
-                double height = entry["height"];
-                double mass = entry["mass"];
-                std::string color = entry["color"];
 
                 Enki::PhysicalObject* o = new Enki::PhysicalObject();
                 o->setRectangular( l1, l2, height, mass );
                 o->setColor( colors[ color ]  );
                 o->pos = Enki::Point( x, y );
-                o->angle = entry.find( "angle" ) == entry.end() ? .0 : (double)entry["angle"]*(M_PI/180.0);
+                o->angle = entry.get( "angle", .0 ).asDouble()*(M_PI/180.0);
                 world->addObject( o );
             }
             continue;
@@ -194,56 +198,60 @@ RobotWorld::RobotWorld( std::string world_file_name ) :
         // cilindros
         if( type.compare( "cylinder" ) == 0 )
         {
-            if( world == NULL )
+            if( world == nullptr )
                 throw std::runtime_error( "Definicion del mundo no encontrada" );
 
-            if( entry.find( "x" )      == entry.end() ||
-                entry.find( "y" )      == entry.end() ||
-                entry.find( "radius" ) == entry.end() ||
-                entry.find( "height" ) == entry.end() ||
-                entry.find( "mass" )   == entry.end() ||
-                entry.find( "color" )  == entry.end() )
+            double x = entry.get( "x", -1 ).asDouble();
+            double y = entry.get( "y", -1 ).asDouble();
+            double radius = entry.get( "radius", -1 ).asDouble();
+            double height = entry.get( "height", -1 ).asDouble();
+            double mass = entry.get( "mass", -2 ).asDouble();
+            std::string color = entry.get( "color", "_UNDEF_" ).asString();
+
+           if( x < 0 ||
+               y < 0 ||
+               radius <= 0 ||
+               height <= 0 ||
+               mass <= -2 ||
+               color.compare( "_UNDEF_" ) == 0 )
             {
                 std::cout << ">> Definicion de 'cylinder' invalida: " << std::endl;
                 std::cout << entry << std::endl;
             }
             else
             {
-                double x = entry["x"];
-                double y = entry["y"];
-                double radius = entry["radius"];
-                double height = entry["height"];
-                double mass = entry["mass"];
-                std::string color = entry["color"];
-
                 Enki::PhysicalObject* o = new Enki::PhysicalObject();
                 o->setCylindric( radius, height, mass );
                 o->setColor( colors[ color ]  );
                 o->pos = Enki::Point( x, y );
-                o->angle = entry.find( "angle" ) == entry.end() ? .0 : (double)entry["angle"]*(M_PI/180.0);
+                o->angle = entry.get( "angle", .0 ).asDouble()*(M_PI/180.0);
                 world->addObject( o );
             }
             continue;
         }
 
-        // robot EPuck
-        if( type.compare( "epuck" ) == 0 )
-        {
-            if( world == NULL )
-                throw std::runtime_error( "Definicion del mundo no encontrada" );
 
-            if( entry.find( "name" )  == entry.end() ||
-                entry.find( "x" )     == entry.end() ||
-                entry.find( "y" )     == entry.end() )
+        // robot EPuck(Thymio2/MarxBot
+        if( type.compare( "epuck" ) == 0 || type.compare( "thymio2" ) || type.compare( "marxbot" ))
+        {
+            if( world == nullptr )
+                throw std::runtime_error( "Definicion del mundo no encontrada al procesar robot" );
+
+            std:: string name = entry.get( "name", "_UNDEF_" ).asString();
+            double x = entry.get( "x", -1 ).asDouble();
+            double y = entry.get( "y", -1 ) .asDouble();
+
+            if( name.compare( "_UNDEF_" )  == 0 ||
+                x < 0 ||
+                y < 0 )
             {
+                std::cout << ">> Definicion de '" << std::flush;
+                std::cout << type << std::flush;
                 std::cout << ">> Definicion de 'EPuck' invalida: " << std::endl;
                 std::cout << entry << std::endl;
             }
             else
             {
-                std:: string name = entry["name"];
-                double x = entry["x"];
-                double y = entry["y"];
 
                 try{
                     robots.at( name );
@@ -252,82 +260,32 @@ RobotWorld::RobotWorld( std::string world_file_name ) :
                 }
                 catch( const std::out_of_range& err )
                 {
-                    RobotEPuck *r = new RobotEPuck( name, Enki::EPuck::CAPABILITY_BASIC_SENSORS | Enki::EPuck::CAPABILITY_CAMERA );
-                    r->pos = Enki::Point( x, y );
-                    r->angle = entry.find( "angle" ) == entry.end() ? .0 : (double)entry["angle"]*(M_PI/180.0);
-                    world->addObject( r );
-                    robots[ name ] = r;
-                }
-            }
-            continue;
-        }
+                    //RobotBase* r = nullptr;
+                    if( type.compare( "epuck" ) == 0 )
+                    {
+                        RobotEPuck* r = new RobotEPuck( name, Enki::EPuck::CAPABILITY_BASIC_SENSORS | Enki::EPuck::CAPABILITY_CAMERA );
+                        r->pos = Enki::Point( x, y );
+                        r->angle = entry.get( "angle", .0 ).asDouble()*(M_PI/180.0);
+                        robots[ name ] = r;
+                        world->addObject( r );
+                    }
+                    else if( type.compare( "thymio2" ) == 0 )
+                    {
+                        RobotThymio2* r = new RobotThymio2( name );
+                        r->pos = Enki::Point( x, y );
+                        r->angle = entry.get( "angle", .0 ).asDouble()*(M_PI/180.0);
+                        robots[ name ] = r;
+                        world->addObject( r );
+                    }
+                    else if( type.compare( "marxbot" ) == 0 )
+                    {
+                        RobotMarxbot* r = new RobotMarxbot( name );
+                        r->pos = Enki::Point( x, y );
+                        r->angle = entry.get( "angle", .0 ).asDouble()*(M_PI/180.0);
+                        robots[ name ] = r;
+                        world->addObject( r );
+                    }
 
-        // robot Thymio2
-        if( type.compare( "thymio2" ) == 0 )
-        {
-            if( world == NULL )
-                throw std::runtime_error( "Definicion del mundo no encontrada" );
-
-            if( entry.find( "name" )  == entry.end() ||
-                entry.find( "x" )     == entry.end() ||
-                entry.find( "y" )     == entry.end() )
-            {
-                std::cout << ">> Definicion de 'Thymio2' invalida: " << std::endl;
-                std::cout << entry << std::endl;
-            }
-            else
-            {
-                std:: string name = entry["name"];
-                double x = entry["x"];
-                double y = entry["y"];
-
-                try{
-                    robots.at( name );
-                    std::cout << ">> Robot con este nombre ya existe: " << std::endl;
-                    std::cout << entry << std::endl;
-                }
-                catch( const std::out_of_range& err )
-                {
-                    RobotThymio2 *r = new RobotThymio2( name );
-                    r->pos = Enki::Point( x, y );
-                    r->angle = entry.find( "angle" ) == entry.end() ? .0 : (double)entry["angle"]*(M_PI/180.0);
-                    world->addObject( r );
-                    robots[ name ] = r;
-                }
-            }
-            continue;
-        }
-
-        if( type.compare( "marxbot" ) == 0 )
-        {
-            if( world == NULL )
-                throw std::runtime_error( "Definicion del mundo no encontrada" );
-
-            if( entry.find( "name" )  == entry.end() ||
-                entry.find( "x" )     == entry.end() ||
-                entry.find( "y" )     == entry.end() )
-            {
-                std::cout << ">> Definicion de 'Marxbot' invalida: " << std::endl;
-                std::cout << entry << std::endl;
-            }
-            else
-            {
-                std:: string name = entry["name"];
-                double x = entry["x"];
-                double y = entry["y"];
-
-                try{
-                    robots.at( name );
-                    std::cout << ">> Robot con este nombre ya existe: " << std::endl;
-                    std::cout << entry << std::endl;
-                }
-                catch( const std::out_of_range& err )
-                {
-                    RobotMarxbot *r = new RobotMarxbot( name );
-                    r->pos = Enki::Point( x, y );
-                    r->angle = entry.find( "angle" ) == entry.end() ? .0 : (double)entry["angle"]*(M_PI/180.0);
-                    world->addObject( r );
-                    robots[ name ] = r;
                 }
             }
             continue;
@@ -337,7 +295,7 @@ RobotWorld::RobotWorld( std::string world_file_name ) :
         std::cout << entry << std::endl;
     }
 
-    if( world == NULL )
+    if( world == nullptr )
         throw std::runtime_error( "Definicion del mundo no encontrada" );
 
     // hacemos el bind aqui ya que en el archivo world vienen el host y la port
@@ -384,6 +342,7 @@ void RobotWorld::stop()
     std::cout << ">> Finalizando despachador de conexiones" << std::endl;
     tDispatcherRunning.store( false );
     tDispatcher->join();
+    delete tDispatcher;
 
     #ifdef WIN32
     WSACleanup();
@@ -413,7 +372,7 @@ void RobotWorld::dispatcher()
         FD_SET( srv_sock, &readfds );
         timeout.tv_sec = 1;
         timeout.tv_usec = 0;
-        if( ::select( srv_sock + 1 , &readfds , NULL , NULL , &timeout ) < 0 ) continue;
+        if( ::select( srv_sock + 1 , &readfds , nullptr , nullptr , &timeout ) < 0 ) continue;
         if( !FD_ISSET( srv_sock, &readfds ) ) continue;
 
         // conexion recibida
@@ -463,7 +422,7 @@ void RobotWorld::TRobot( int sock )
     auto start = std::chrono::high_resolution_clock::now();
     while( i < sizeof( buff ) )
     {
-        // 4 segundos para recibir el nombre del robot a controlar
+        // 4 segundos para recibir el 1er comando
         auto end = std::chrono::high_resolution_clock::now();
         if( std::chrono::duration_cast<std::chrono::seconds>(end - start).count() >= 4 )
         {

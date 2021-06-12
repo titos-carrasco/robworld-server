@@ -19,10 +19,13 @@ RobotEPuck::~RobotEPuck()
     std::cout << "'" << std::endl;
 }
 
-void RobotEPuck::getSensors( JSON& resp )
+void RobotEPuck::getSensors( Json::Value& resp )
 {
-    resp["proximitySensorValues"] = myProximitySensorValues;
-    resp["proximitySensorDistances"] = myProximitySensorDistances;
+    resp["proximitySensorValues"] = Json::arrayValue;
+    for( unsigned int i = 0; i<sizeof(myProximitySensorValues)/sizeof(myProximitySensorValues[0]); i++ ) resp["proximitySensorValues"].append( myProximitySensorValues[i] );
+
+    resp["proximitySensorDistances"] = Json::arrayValue;
+    for( unsigned int i = 0; i<sizeof(myProximitySensorDistances)/sizeof(myProximitySensorDistances[0]); i++ ) resp["proximitySensorDistances"].append( myProximitySensorDistances[i] );
 }
 
 void RobotEPuck::setLeds( double* leds, int len )
@@ -32,6 +35,7 @@ void RobotEPuck::setLeds( double* leds, int len )
 
 unsigned char* RobotEPuck::getCameraImage( unsigned int* len )
 {
+    // img debe ser liberado en el invocador
     *len = sizeof( myCameraImage )/sizeof( myCameraImage[0] );
     unsigned char *img = new unsigned char[*len];
     memcpy( img, myCameraImage, *len );

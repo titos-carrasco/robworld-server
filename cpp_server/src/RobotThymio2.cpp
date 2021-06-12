@@ -19,11 +19,16 @@ RobotThymio2::~RobotThymio2()
     std::cout << "'" << std::endl;
 }
 
-void RobotThymio2::getSensors( JSON& resp )
+void RobotThymio2::getSensors( Json::Value& resp )
 {
-    resp["proximitySensorValues"] = myProximitySensorValues;
-    resp["proximitySensorDistances"] = myProximitySensorDistances;
-    resp["groundSensorValues"] = myGroundSensorValues;
+    resp["proximitySensorValues"] = Json::arrayValue;
+    for( unsigned int i = 0; i<sizeof(myProximitySensorValues)/sizeof(myProximitySensorValues[0]); i++ ) resp["proximitySensorValues"].append( myProximitySensorValues[i] );
+
+    resp["proximitySensorDistances"] = Json::arrayValue;
+    for( unsigned int i = 0; i<sizeof(myProximitySensorDistances)/sizeof(myProximitySensorDistances[0]); i++ ) resp["proximitySensorDistances"].append( myProximitySensorDistances[i] );
+
+    resp["groundSensorValues"] = Json::arrayValue;
+    for( unsigned int i = 0; i<sizeof(myGroundSensorValues)/sizeof(myGroundSensorValues[0]); i++ ) resp["groundSensorValues"].append( myGroundSensorValues[i] );
 }
 
 void RobotThymio2::setLeds( double* leds, int nleds )
@@ -35,7 +40,7 @@ void RobotThymio2::setLeds( double* leds, int nleds )
 unsigned char* RobotThymio2::getCameraImage( unsigned int* len )
 {
     *len = 0;
-    return NULL;
+    return nullptr;
 }
 
 void RobotThymio2::controlStep( double dt )

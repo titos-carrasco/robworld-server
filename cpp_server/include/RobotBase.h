@@ -24,8 +24,8 @@
 #include <enki/robots/DifferentialWheeled.h>
 #include <enki/PhysicalEngine.h>
 
-#include <json.hpp>
-using JSON = nlohmann::json;
+#include <jsoncpp/json/json.h>
+#include <jsoncpp/json/writer.h>
 
 class RobotBase
 {
@@ -34,6 +34,7 @@ class RobotBase
         std::mutex mtx;
         double mypos[2];
         double myspeed[2];
+        char in_buffer[512];
 
     protected:
         std::mutex mtx_enki;
@@ -47,13 +48,13 @@ class RobotBase
         void stop();
 
     private:
-        int readline( int, std::string** );
+        int readline( int );
         bool sendline( int, std::string );
         bool sendbytes( int, unsigned char*, unsigned int );
 
     protected:
         void myControlStep( Enki::DifferentialWheeled* );
-        virtual void getSensors( JSON& resp ) = 0;
+        virtual void getSensors( Json::Value& resp ) = 0;
         virtual void setLeds( double*, int ) = 0;
         virtual unsigned char* getCameraImage( unsigned int* ) = 0;
 };
