@@ -1,0 +1,99 @@
+Los archivos world (formato JSON) describen el mundo, en donde se desenvolverán los robots, definiendo varios elementos
+
+El orden de aparición de los elementos y su descripción se muestran a continuación
+
+color
+-----
+    { "type":"color", "name":"gray" , "r":229, "g":229, "b":229, "a":255 }
+        name   : nombre a asignar a este color para su uso en el resto del archivo
+        r, g, b: valor númerico (0-255) para los colores RGB
+        a      : valor de transparencia (0 es completamente transparente, 255 no transparente)
+
+
+world
+-----
+    { "type":"world", "width":100, "height":100, "walls": 5, "color":"gray", "ground": "sumo.ppm", "host":"", "port":44444  }
+        width  : dimensión X del mundo
+        height : dimensión Y del mundo
+        walls  : alto de las murallas que lo rodean
+        color  : nombre del color a utilizzar (debe estar definido previamente)
+        ground : ruta de archivo ppp para usar de "suelo". Puede especificar "" para indicar que no se utilizará
+        host   : direción IP local en donde se recibirán las conexiones a los robots:
+                 ""          -> se usarán todas las interfaces
+                 "127.0.0.1" -> se usará sólo locahost
+                 "a.b.c.d"   -> se usará sólo esta interfaz
+        port   : puerta en donde se recibirán las conexiones a los robots
+
+box
+---
+    { "type":"box", "x":30, "y":50, "l1":2, "l2":40, "height":10, "mass":-1, "color":"green" }
+        x, y  : coordenadas en donde se posicionará el centro de este elemento
+        l1    : tamaño en X de este elemento considerado desde su centro
+        l2    : tamaño en Y de este elemento considerado desde su centro
+        height: alto del elemento
+        mass  : masa del elemento( -1 significa que no se moverá cuando colisionen con el)
+        color : nombre del color a utilizzar (debe estar definido previamente)
+
+cylinder
+--------
+    { "type":"cylinder", "x":15, "y":50, "radius":3, "height":10, "mass":1000, "color":"gray" }
+        x, y  : coordenadas en donde se posicionará el centro de este elemento
+        radius: radio de este elemento considerado desde su centro
+        height: alto del elemento
+        mass  : masa del elemento( -1 significa que no se moverá cuando colisionen con el)
+        color : nombre del color a utilizzar (debe estar definido previamente)
+
+
+robot
+-----
+    { "type":"thymio2", "name":"Thymio-01", "x":50, "y":50, "angle":0 }
+    { "type":"epuck"  , "name":"Epuck-01" , "x":50, "y":90, "angle":0 }
+        x, y  : coordenadas en donde se posicionará el centro de este elemento
+        angle : orientación inicial del robot en grados (0 = hacia la derecha, 90 hacia arriba, 180 hacia la izquierda
+
+        Robot thymio2:
+            Sensores de Proximidad:
+                0: frontal izquierdo izquiero
+                1: frontal izquierdo
+                2: frontal frontal
+                3: frontal derecho
+                4: frontal derecho derecho
+                5: trasero izquierdo
+                6: trasero derecho
+            Sensores de línea:
+                0: izquierdo
+                1: derecho
+
+        Robot epuck  :
+            Sensores de Proximidad:
+                0: frontal frontal derecho
+                1: frontal derecho
+                2: derecho
+                3: trasero derecho
+                4: trasero izquierdo
+                5: izquierdo
+                6: frontal izquierdo
+                7: frontal frontal izquierdo
+
+
+Ejemplo:
+-------
+
+[
+    { "type":"color", "name":"gray" , "r":229, "g":229, "b":229, "a":0 },
+    { "type":"color", "name":"red" , "r":255, "g":0, "b":0, "a":0 },
+    { "type":"color", "name":"green", "r":0, "g":128, "b":0, "a":0 },
+    { "type":"color", "name":"blue" , "r":0, "g":0, "b":255, "a":0 },
+
+    { "type":"world", "width":100, "height":100, "walls": 5, "color":"gray", "ground": "sumo.ppm", "host":"", "port":44444  },
+
+    { "type":"box", "x":30, "y":50, "l1":2, "l2":40, "height":10, "mass":-1, "color":"green" },
+    { "type":"box", "x":70, "y":50, "l1":2, "l2":40, "height":10, "mass":1000, "color":"blue" },
+    { "type":"box", "x":50, "y":31, "l1":38, "l2":2, "height":10, "mass":1000, "color":"red" },
+    { "type":"box", "x":50, "y":69, "l1":38, "l2":2, "height":10, "mass":1000, "color":"gray" },
+    { "type":"cylinder", "x":15, "y":50, "radius":3, "height":10, "mass":1000, "color":"gray" },
+
+    { "type":"thymio2", "name":"Thymio-01", "x":50, "y":50 },
+    { "type":"epuck", "name":"Epuck-01", "x":50, "y":90 }
+]
+
