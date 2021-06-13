@@ -38,13 +38,17 @@ public class RobotBase {
         in = new BufferedReader( new InputStreamReader( sock.getInputStream(), "iso-8859-1" ) );
 
         // solicitamos acceso enviando el nombre del robot
-        out.print( name );
-        out.print( '\n' );
-        out.flush();
+        JsonObject jobj = Json.createObjectBuilder()
+            .add( "connect", name )
+            .build();
+        String resp = sendCommand( jobj, true );
 
         // si es aceptado nos envia el tipo de robot que somos
-        String el_tipo = in.readLine();
-        if( !this.tipo.equals( el_tipo ) )
+        JsonReader jsonReader = Json.createReader( new StringReader( resp ) );
+        JsonObject json = jsonReader.readObject();
+        jsonReader.close();
+
+        if( !this.tipo.equals( json.getString( "type" ) ) )
             throw new Exception( "Robot no aceptado" );
     }
 

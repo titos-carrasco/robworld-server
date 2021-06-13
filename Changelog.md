@@ -4,7 +4,7 @@
 
 ### Changed
 - Migramos a jsoncpp
-
+- Corrige primera linea del protocolo para manejarla en formato json
 
 ## @v1.0.1 2021-06-11
 

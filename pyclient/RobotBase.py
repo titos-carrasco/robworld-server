@@ -87,13 +87,11 @@ class RobotBase():
             self.sock.connect( ( host, port ) )
 
             # pedimos conexion al robot
-            self.sock.sendall( bytes( name + "\n", "iso-8859-1" ) )
-
-            # recibimos la respuesta del servidor
-            tipo = self.readline()
+            pkg = { "connect": name }
+            resp = self.sendPkg( pkg )
 
             # validamos la respuesta
-            if( tipo != self.tipo ):
+            if( resp["type"] != self.tipo ):
                 raise Exception( f"Robot '{name}' no aceptado" )
         except Exception as e:
             try:

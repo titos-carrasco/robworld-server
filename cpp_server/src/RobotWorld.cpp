@@ -12,8 +12,13 @@
 #include <fstream>
 #include <fcntl.h>
 
+#ifdef WIN32
+#include <json/json.h>
+#include <json/writer.h>
+#else
 #include <jsoncpp/json/json.h>
 #include <jsoncpp/json/writer.h>
+#endif
 
 #include "RobotWorld.h"
 
@@ -416,13 +421,14 @@ void RobotWorld::TRobot( int sock )
     ::setsockopt( sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof( struct timeval ) );
     #endif
 
+    // 4 segundos para recibir la peticion de acceso a un robot
+    Json::Value json;
     char buff[128];
     char c;
     unsigned int i = 0;
     auto start = std::chrono::high_resolution_clock::now();
-    while( i < sizeof( buff ) )
+    while( i < sizeof( buff )/sizeof(buff[0]) )
     {
-        // 4 segundos para recibir el 1er comando
         auto end = std::chrono::high_resolution_clock::now();
         if( std::chrono::duration_cast<std::chrono::seconds>(end - start).count() >= 4 )
         {
@@ -437,9 +443,24 @@ void RobotWorld::TRobot( int sock )
             {
                 buff[i]='\0';
 
-                // si existe toma el control de este hilo
+                // la línea de conexión debe venir en formato JSON
+                try { std::stringstream( buff ) >> json; }
+                catch( ... )
+                {
+                    std::cout << ">> Comando de conexion es invalido" << std::endl;
+                    break;
+                }
+
+                // recuperamos el nombre del robot con el que se desea trabajar
+                std::string name = json.get( "connect", "_UNDEF_" ).asString();
+                if( name.compare( "_UNDEF_") == 0 )
+                {
+                    std::cout << ">> Comando de conexion es invalido" << std::endl;
+                    break;
+                }
+
+                // si el robot existe toma el control de este hilo
                 try{
-                    std::string name( buff );
                     RobotBase* r = robots.at( name );
                     r->run( sock );
                 }

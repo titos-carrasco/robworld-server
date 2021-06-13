@@ -5,7 +5,7 @@ import sys
 
 SETUP = {
     "name"             : "robworld",
-    "version"          : "1.0.1",
+    "version"          : "1.1.0",
     "description"      : "Control de robots en el mundo de robots",
     "license"          : "MIT",
     "author"           : "Roberto Carrasco",

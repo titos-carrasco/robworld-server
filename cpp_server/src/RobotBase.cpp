@@ -34,15 +34,17 @@ void RobotBase::run( int sock )
         return;
     }
 
-    // enviamos el tipo de robot que somos
-    sendline( sock, tipo );
-
-    // show time
     running.store( true );
     Json::Value json;
+    Json::Value resp;
     Json::StreamWriterBuilder jwbuilder;
     jwbuilder["indentation"] = "";
 
+    // enviamos el tipo de robot que somos
+    std::stringstream( "{ \"type\":\"" + tipo + "\"}" ) >> resp;
+    sendline( sock, Json::writeString( jwbuilder, resp ) );
+
+    // show time
     std::cout << ">> Robot '" << std::flush;
     std::cout << name << std::flush;
     std::cout << "' ejecutando" << std::endl;
@@ -53,14 +55,15 @@ void RobotBase::run( int sock )
         if( n == 0 ) continue;
         if( n < 0 ) break;
 
+        json.clear();
+        resp.clear();
+
         // la línea debe venir en formato JSON
         try { std::stringstream( in_buffer ) >> json; }
         catch( ... ){ break; }
 
         // procesamos el comando
         std::string cmd = json.get( "cmd", "_UNDEF_" ).asString();
-        Json::Value resp;
-        //std::stringstream( "{}" ) >> resp;
         if( cmd.compare( "getSensors") == 0 )
         {
             mtx_enki.lock();

@@ -24,8 +24,13 @@
 #include <enki/robots/DifferentialWheeled.h>
 #include <enki/PhysicalEngine.h>
 
+#ifdef WIN32
+#include <json/json.h>
+#include <json/writer.h>
+#else
 #include <jsoncpp/json/json.h>
 #include <jsoncpp/json/writer.h>
+#endif
 
 class RobotBase
 {
@@ -49,7 +54,6 @@ class RobotBase
 
     private:
         int readline( int );
-        bool sendline( int, std::string );
         bool sendbytes( int, unsigned char*, unsigned int );
 
     protected:
@@ -57,6 +61,7 @@ class RobotBase
         virtual void getSensors( Json::Value& resp ) = 0;
         virtual void setLeds( double*, int ) = 0;
         virtual unsigned char* getCameraImage( unsigned int* ) = 0;
+        bool sendline( int, std::string );
 };
 
 #endif // ROBOTBASE_H
