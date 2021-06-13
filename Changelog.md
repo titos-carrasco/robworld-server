@@ -1,6 +1,6 @@
 # ChangeLog
 
-## @@ - 2021-06-12
+## @v.1.1.0 - 2021-06-12
 
 ### Changed
 - Migramos a jsoncpp
