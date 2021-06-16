@@ -6,10 +6,10 @@
 
     { "type":"world", "width":100, "height":100, "walls": 5, "color":"gray", "ground": "sumo.ppm", "host":"", "port":44444  },
 
-    { "type":"box", "x":30, "y":50, "l1":2, "l2":40, "height":10, "mass":-1, "color":"green" },
-    { "type":"box", "x":70, "y":50, "l1":2, "l2":40, "height":10, "mass":1000, "color":"blue" },
-    { "type":"box", "x":50, "y":31, "l1":38, "l2":2, "height":10, "mass":1000, "color":"red" },
-    { "type":"box", "x":50, "y":69, "l1":38, "l2":2, "height":10, "mass":1000, "color":"gray" },
+    { "type":"box", "x":30, "y":30, "sizex":2, "sizey":40, "height":10, "mass":-1, "color":"green" },
+    { "type":"box", "x":70, "y":30, "sizex":2, "sizey":40, "height":10, "mass":1000, "color":"blue" },
+    { "type":"box", "x":32, "y":30, "sizex":38, "sizey":2, "height":10, "mass":1000, "color":"red" },
+    { "type":"box", "x":32, "y":68, "sizex":38, "sizey":2, "height":10, "mass":1000, "color":"gray" },
     { "type":"cylinder", "x":15, "y":50, "radius":3, "height":10, "mass":1000, "color":"gray" },
 
     { "type":"marxbot", "name":"Marxbot-01", "x":50, "y":50, "angle":0 }

@@ -170,16 +170,16 @@ RobotWorld::RobotWorld( std::string world_file_name ) :
 
             double x = entry.get( "x", -1 ).asDouble();
             double y = entry.get( "y", -1 ).asDouble();
-            double l1 = entry.get( "l1", -1 ).asDouble();
-            double l2 = entry.get( "l2", -1 ).asDouble();
+            double sizex = entry.get( "sizex", -1 ).asDouble();
+            double sizey = entry.get( "sizey", -1 ).asDouble();
             double height = entry.get( "height", -1 ).asDouble();
             double mass = entry.get( "mass", -2 ).asDouble();
             std::string color = entry.get( "color", "_UNDEF_" ).asString();
 
             if( x < 0 ||
                 y < 0 ||
-                l1 <= 0 ||
-                l2 <= 0 ||
+                sizex <= 0 ||
+                sizey <= 0 ||
                 height <= 0 ||
                 mass <= -2 ||
                 color.compare( "_UNDEF_" ) == 0 )
@@ -191,9 +191,9 @@ RobotWorld::RobotWorld( std::string world_file_name ) :
             {
 
                 Enki::PhysicalObject* o = new Enki::PhysicalObject();
-                o->setRectangular( l1, l2, height, mass );
+                o->setRectangular( sizex, sizey, height, mass );
                 o->setColor( colors[ color ]  );
-                o->pos = Enki::Point( x, y );
+                o->pos = Enki::Point( x + sizex/2, y + sizey/2 );
                 o->angle = entry.get( "angle", .0 ).asDouble()*(M_PI/180.0);
                 world->addObject( o );
             }

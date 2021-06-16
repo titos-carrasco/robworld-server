@@ -26,10 +26,10 @@ world
 
 box
 ---
-    { "type":"box", "x":30, "y":50, "l1":2, "l2":40, "height":10, "mass":-1, "color":"green" }
-        x, y  : coordenadas en donde se posicionará el centro de este elemento
-        l1    : tamaño en X de este elemento considerado desde su centro
-        l2    : tamaño en Y de este elemento considerado desde su centro
+    { "type":"box", "x":30, "y":50, "sizex":2, "sizey":40, "height":10, "mass":-1, "color":"green" }
+        x, y  : coordenadas en donde se posicionará este elemento (left, bottom)
+        sizex : tamaño en X de este elemento
+        sizey : tamaño en Y de este elemento
         height: alto del elemento
         mass  : masa del elemento( -1 significa que no se moverá cuando colisionen con el)
         color : nombre del color a utilizzar (debe estar definido previamente)
@@ -87,10 +87,10 @@ Ejemplo:
 
     { "type":"world", "width":100, "height":100, "walls": 5, "color":"gray", "ground": "sumo.ppm", "host":"", "port":44444  },
 
-    { "type":"box", "x":30, "y":50, "l1":2, "l2":40, "height":10, "mass":-1, "color":"green" },
-    { "type":"box", "x":70, "y":50, "l1":2, "l2":40, "height":10, "mass":1000, "color":"blue" },
-    { "type":"box", "x":50, "y":31, "l1":38, "l2":2, "height":10, "mass":1000, "color":"red" },
-    { "type":"box", "x":50, "y":69, "l1":38, "l2":2, "height":10, "mass":1000, "color":"gray" },
+    { "type":"box", "x":30, "y":50, "sizex":2, "sizey":40, "height":10, "mass":-1, "color":"green" },
+    { "type":"box", "x":70, "y":50, "sizex":2, "sizey":40, "height":10, "mass":1000, "color":"blue" },
+    { "type":"box", "x":50, "y":31, "sizex":38, "sizey":2, "height":10, "mass":1000, "color":"red" },
+    { "type":"box", "x":50, "y":69, "sizex":38, "sizey":2, "height":10, "mass":1000, "color":"gray" },
     { "type":"cylinder", "x":15, "y":50, "radius":3, "height":10, "mass":1000, "color":"gray" },
 
     { "type":"thymio2", "name":"Thymio-01", "x":50, "y":50 },

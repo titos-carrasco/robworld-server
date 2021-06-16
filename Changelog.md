@@ -1,10 +1,18 @@
 # ChangeLog
 
+## @v.1.1.1 - 2021-06-15
+
+### Changed
+- Renombramos parámetros l1 y l2 de la definición del elemento BOX
+- Cambiamos interpretación de origen (x,y) en componente BOX. Pasa de (center, center) a (left, bottom)
+
+
 ## @v.1.1.0 - 2021-06-12
 
 ### Changed
 - Migramos a jsoncpp
 - Corrige primera linea del protocolo para manejarla en formato json
+
 
 ## @v1.0.1 2021-06-11
 
@@ -13,6 +21,7 @@
 
 ### Fixed
 - Corrige timeout en socket
+
 
 ## @@ - 2021-06-09
 
