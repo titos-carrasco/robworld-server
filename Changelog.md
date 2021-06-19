@@ -1,13 +1,22 @@
 # ChangeLog
 
-## @v.1.1.1 - 2021-06-15
+## @v1.2.1 - XXX
+
+### Changed
+- Renombra archivos .h a .hpp
+
+### Added
+- Agrega (en desarrollo) websocket de manera basica para soportar snap o scratch
+
+
+## @v1.1.1 - 2021-06-15
 
 ### Changed
 - Renombramos parámetros l1 y l2 de la definición del elemento BOX
 - Cambiamos interpretación de origen (x,y) en componente BOX. Pasa de (center, center) a (left, bottom)
 
 
-## @v.1.1.0 - 2021-06-12
+## @v1.1.0 - 2021-06-12
 
 ### Changed
 - Migramos a jsoncpp

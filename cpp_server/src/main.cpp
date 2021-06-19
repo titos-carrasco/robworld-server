@@ -1,6 +1,11 @@
 #include <QApplication>
 
-#include "RobotWorld.h"
+#include "RobotWorld.hpp"
+
+#include <viewer/Viewer.h>
+#include "RobotThymio2.hpp"
+#include "RobotEPuck.hpp"
+#include "RobotMarxbot.hpp"
 
 class Viewer : public Enki::ViewerWidget
 {
@@ -22,9 +27,9 @@ class Viewer : public Enki::ViewerWidget
             wallsHeight = walls;
 
             // para desplegar la "piel" de los robots
-            managedObjectsAliases[&typeid(RobotEPuck)] = &typeid(Enki::EPuck);
-            managedObjectsAliases[&typeid(RobotThymio2)] = &typeid(Enki::Thymio2);
-            managedObjectsAliases[&typeid(RobotMarxbot)] = &typeid(Enki::Marxbot);
+            managedObjectsAliases[&typeid(RobWorld::RobotEPuck)] = &typeid(Enki::EPuck);
+            managedObjectsAliases[&typeid(RobWorld::RobotThymio2)] = &typeid(Enki::Thymio2);
+            managedObjectsAliases[&typeid(RobWorld::RobotMarxbot)] = &typeid(Enki::Marxbot);
         }
 
         ~Viewer()
@@ -45,10 +50,10 @@ int main(int argc, char* argv[])
     QApplication app( argc, argv );
 
     // preparamos el mundo segun el archivo world
-    RobotWorld* mpg;
+    RobWorld::RobotWorld* mpg;
     try
     {
-        mpg = new RobotWorld( argv[1] );
+        mpg = new RobWorld::RobotWorld( argv[1] );
     }
     catch( std::exception& e)
     {

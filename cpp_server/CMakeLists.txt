@@ -39,6 +39,7 @@ add_executable( ${PROJECT_NAME}
     src/RobotEPuck.cpp
     src/RobotThymio2.cpp
     src/RobotMarxbot.cpp
+    src/Connection.cpp
 )
 
 set( EXECUTABLE_OUTPUT_PATH "bin" )
@@ -71,5 +72,6 @@ else()
         ${OPENGL_LIBRARIES}
         Threads::Threads
         jsoncpp
+        crypto
     )
 endif()
