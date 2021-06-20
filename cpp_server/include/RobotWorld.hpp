@@ -10,11 +10,9 @@
     #include <arpa/inet.h>
     #include <unistd.h>
 #endif
-
 #include <iostream>
 #include <thread>
 #include <atomic>
-
 #include "RobotBase.hpp"
 
 namespace RobWorld

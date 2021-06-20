@@ -1,8 +1,6 @@
 #include <QApplication>
-
-#include "RobotWorld.hpp"
-
 #include <viewer/Viewer.h>
+#include "RobotWorld.hpp"
 #include "RobotThymio2.hpp"
 #include "RobotEPuck.hpp"
 #include "RobotMarxbot.hpp"

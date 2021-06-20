@@ -2,9 +2,7 @@
 #define ROBOTTHYMIO2_HPP
 
 #include <iostream>
-
 #include <enki/robots/thymio2/Thymio2.h>
-
 #include "RobotBase.hpp"
 #include "Connection.hpp"
 

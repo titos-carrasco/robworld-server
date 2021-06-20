@@ -37,11 +37,8 @@ namespace RobWorld
 
     BinaryData* RobotEPuck::getCameraImage()
     {
-        // la BinaryData debe ser liberada en el invocador
         unsigned int len = sizeof( myCameraImage )/sizeof( myCameraImage[0] );
-        unsigned char *img = new unsigned char[len];
-        memcpy( img, myCameraImage, len );
-        return new BinaryData( img, len );
+        return new BinaryData( myCameraImage, len );
     }
 
     void RobotEPuck::controlStep( double dt )

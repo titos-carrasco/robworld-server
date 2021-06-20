@@ -415,12 +415,12 @@ namespace RobWorld
         ::setsockopt( sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof( struct timeval ) );
         #endif
 
-        Connection conn( sock );
-        if( conn.doHandshake( 3 ) )
+        Connection* conn = Connection::getConnector( sock, 3 );
+        if( conn != nullptr )
         {
             Json::Value json;
-            char buff[128];
-            int n = conn.readline( buff, sizeof(buff)/sizeof(buff[0]), 1 );
+            std::string buff;
+            int n = conn->readData( buff, 1 );
 
             if( n == 0 ) std::cout << ">> Timeout" << std::endl;
             else if( n < 0 ) std::cout << ">> Error en la conexion" << std::endl;
@@ -442,7 +442,7 @@ namespace RobWorld
                         // si el robot existe toma el control de este hilo
                         try{
                             RobotBase* r = robots.at( name );
-                            r->run( conn );
+                            r->run( *conn );
                         }
                         catch( const std::out_of_range& err )
                         {
@@ -455,6 +455,7 @@ namespace RobWorld
                     std::cout << ">> Comando de conexion es invalido" << std::endl;
                 }
             }
+            delete conn;
         }
         else
             std::cout << ">> Protocolo no aceptado" << std::endl;

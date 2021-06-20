@@ -4,6 +4,7 @@
 
 ### Changed
 - Renombra archivos .h a .hpp
+- Reordena código
 
 ### Added
 - Agrega (en desarrollo) websocket de manera basica para soportar snap o scratch

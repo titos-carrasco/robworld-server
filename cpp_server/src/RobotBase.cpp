@@ -44,17 +44,17 @@ namespace RobWorld
 
         // enviamos el tipo de robot que somos
         std::stringstream( "{ \"type\":\"" + tipo + "\"}" ) >> resp;
-        conn.sendline( Json::writeString( jwbuilder, resp ) );
+        conn.sendData( Json::writeString( jwbuilder, resp ) );
 
         // show time
         std::cout << ">> Robot '" << std::flush;
         std::cout << name << std::flush;
         std::cout << "' ejecutando" << std::endl;
-        char buff[512];
+        std::string buff;
         while( running.load() )
         {
             // leemos la línea y verificamos la conexión
-            int n = conn.readline( buff, sizeof( buff )/sizeof( buff[0] ), 1 );
+            int n = conn.readData( buff, 1 );
             if( n == 0 ) continue;
             if( n < 0 ) break;
 
@@ -126,7 +126,7 @@ namespace RobWorld
                 BinaryData* cameraImage = getCameraImage();
                 mtx_enki.unlock();
 
-                bool ok = conn.sendbinarydata( cameraImage );
+                bool ok = conn.sendData( cameraImage );
                 delete cameraImage;
                 if( !ok ) break;
                 continue;
@@ -137,7 +137,7 @@ namespace RobWorld
             }
 
             // enviamos la respuesta
-            if( !conn.sendline( Json::writeString( jwbuilder, resp ) ) ) break;
+            if( !conn.sendData( Json::writeString( jwbuilder, resp ) ) ) break;
         }
 
         // esto es todo

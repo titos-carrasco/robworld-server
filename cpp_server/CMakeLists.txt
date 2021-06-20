@@ -39,7 +39,10 @@ add_executable( ${PROJECT_NAME}
     src/RobotEPuck.cpp
     src/RobotThymio2.cpp
     src/RobotMarxbot.cpp
+    src/BinaryData.cpp
     src/Connection.cpp
+    src/LineProtocol.cpp
+    #src/WebsocketProtocol.cpp
 )
 
 set( EXECUTABLE_OUTPUT_PATH "bin" )

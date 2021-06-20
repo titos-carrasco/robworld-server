@@ -88,6 +88,7 @@ class MyThymio2( RobotThymio2 ):
                 self.setSpeed( -self.s*10, self.s )
                 time.sleep( 0.1 )
                 self.setSpeed( self.s, self.s )
+            time.sleep( 0.1 )
         self.setSpeed( 0, 0 )
         self.close()
 
@@ -115,6 +116,7 @@ class MyEPuck( RobotEPuck ):
                 self.setSpeed( -self.s*10, self.s )
                 time.sleep( 0.1 )
                 self.setSpeed( self.s, self.s )
+            time.sleep( 0.1 )
         self.setSpeed( 0, 0 )
         self.close()
 

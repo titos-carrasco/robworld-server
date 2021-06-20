@@ -2,9 +2,7 @@
 #define ROBOTMARXBOT_HPP
 
 #include <iostream>
-
 #include <enki/robots/marxbot/Marxbot.h>
-
 #include "RobotBase.hpp"
 #include "Connection.hpp"
 
