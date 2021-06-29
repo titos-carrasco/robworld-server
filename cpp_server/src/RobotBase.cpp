@@ -36,6 +36,7 @@ namespace RobWorld
             return;
         }
 
+        std::string buff;
         running.store( true );
         Json::Value json;
         Json::Value resp;
@@ -44,100 +45,104 @@ namespace RobWorld
 
         // enviamos el tipo de robot que somos
         std::stringstream( "{ \"type\":\"" + tipo + "\"}" ) >> resp;
-        conn.sendData( Json::writeString( jwbuilder, resp ) );
-
-        // show time
-        std::cout << ">> Robot '" << std::flush;
-        std::cout << name << std::flush;
-        std::cout << "' ejecutando" << std::endl;
-        std::string buff;
-        while( running.load() )
+        if( conn.sendData( Json::writeString( jwbuilder, resp ) ) )
         {
-            // leemos la línea y verificamos la conexión
-            int n = conn.readData( buff, 1 );
-            if( n == 0 ) continue;
-            if( n < 0 ) break;
-
-            json.clear();
-            resp.clear();
-
-            // la línea debe venir en formato JSON
-            try { std::stringstream( buff ) >> json; }
-            catch( ... ){ break; }
-
-            // procesamos el comando
-            std::string cmd = json.get( "cmd", "_UNDEF_" ).asString();
-            if( cmd.compare( "getSensors") == 0 )
+            // show time
+            std::cout << ">> Robot '" << std::flush;
+            std::cout << name << std::flush;
+            std::cout << "' ejecutando" << std::endl;
+            while( running.load() )
             {
-                mtx_enki.lock();
+                // leemos la línea y verificamos la conexión
+                int n = conn.readData( buff, 1 );
+                if( n == 0 ) continue;
+                if( n < 0 ) break;
 
-                resp["pos"] = Json::arrayValue;
-                for( unsigned int i = 0; i<sizeof(mypos)/sizeof(mypos[0]); i++ ) resp["pos"].append( mypos[i] );
+                json.clear();
+                resp.clear();
 
-                resp["speed"] = Json::arrayValue;
-                for( unsigned int i = 0; i<sizeof(myspeed)/sizeof(myspeed[0]); i++ ) resp["speed"].append( myspeed[i] );
+                // la línea debe venir en formato JSON
+                try { std::stringstream( buff ) >> json; }
+                catch( ... ){ break; }
 
-                getSensors( resp );
-                mtx_enki.unlock();
-            }
-            else if( cmd.compare( "setSpeed") == 0 )
-            {
-                try
+                // procesamos el comando
+                std::string cmd;
+                try { cmd = json.get( "cmd", "_UNDEF_" ).asString(); }
+                catch( ... ){ break; }
+
+                if( cmd.compare( "getSensors") == 0 )
                 {
-                    double ls = json.get( "leftSpeed", .0 ).asDouble();
-                    double rs = json.get( "rightSpeed", .0 ).asDouble();
+                    mtx_enki.lock();
+
+                    resp["pos"] = Json::arrayValue;
+                    for( unsigned int i = 0; i<sizeof(mypos)/sizeof(mypos[0]); i++ ) resp["pos"].append( mypos[i] );
+
+                    resp["speed"] = Json::arrayValue;
+                    for( unsigned int i = 0; i<sizeof(myspeed)/sizeof(myspeed[0]); i++ ) resp["speed"].append( myspeed[i] );
+
+                    getSensors( resp );
+                    mtx_enki.unlock();
+                }
+                else if( cmd.compare( "setSpeed") == 0 )
+                {
+                    double ls, rs;
+                    try
+                    {
+                        ls = json.get( "leftSpeed", .0 ).asDouble();
+                        rs = json.get( "rightSpeed", .0 ).asDouble();
+                    }
+                    catch( ... ){ break; }
                     mtx_enki.lock();
                     myspeed[0] = ls;
                     myspeed[1] = rs;
                     mtx_enki.unlock();
                 }
-                catch( ... ){ break; }
-            }
-            else if( cmd.compare( "setLedRing") == 0 )
-            {
-                try
+                else if( cmd.compare( "setLedRing") == 0 )
                 {
-                    double st = json.get( "estado", .0 ).asDouble();
+                    double st;
+                    try
+                    {
+                        st = json.get( "estado", .0 ).asDouble();
+                    }
+                    catch( ... ){ break; }
                     mtx_enki.lock();
                     setLeds( &st, 1 );
                     mtx_enki.unlock();
                 }
-                catch( ... ){ break; }
-            }
-            else if( cmd.compare( "setLedsIntensity") == 0 )
-            {
-                try
+                else if( cmd.compare( "setLedsIntensity") == 0 )
                 {
-                    Json::Value jleds = json["leds"];
-                    unsigned int n = jleds.size();
                     std::vector<double> leds;
-                    for( unsigned int i=0; i<n; i++ ) leds.push_back( jleds[i].asDouble() );
+                    try
+                    {
+                        Json::Value jleds = json["leds"];
+                        unsigned int n = jleds.size();
+                        for( unsigned int i=0; i<n; i++ ) leds.push_back( jleds[i].asDouble() );
+                    }
+                    catch( ... ){ break; }
 
-                    mtx_enki.lock();
-                    setLeds( &leds[0], n );
-                    mtx_enki.unlock();
+                    if( leds.size() > 0 )
+                    {
+                        mtx_enki.lock();
+                        setLeds( &leds[0], n );
+                        mtx_enki.unlock();
+                    }
                 }
-                catch( ... ){ break; }
-            }
-            else if( cmd.compare( "getCameraImage") == 0 )
-            {
-                mtx_enki.lock();
-                #include "Connection.hpp"
-                BinaryData* cameraImage = getCameraImage();
-                mtx_enki.unlock();
+                else if( cmd.compare( "getCameraImage") == 0 )
+                {
+                    mtx_enki.lock();
+                    BinaryData* cameraImage = getCameraImage();
+                    mtx_enki.unlock();
 
-                bool ok = conn.sendData( cameraImage );
-                delete cameraImage;
-                if( !ok ) break;
-                continue;
-            }
-            else
-            {
-                break;
-            }
+                    bool ok = conn.sendData( cameraImage );
+                    delete cameraImage;
+                    if( !ok ) break;
+                    continue;
+                }
+                else break;
 
-            // enviamos la respuesta
-            if( !conn.sendData( Json::writeString( jwbuilder, resp ) ) ) break;
+                // enviamos la respuesta
+                if( !conn.sendData( Json::writeString( jwbuilder, resp ) ) ) break;
+            }
         }
 
         // esto es todo
@@ -164,6 +169,5 @@ namespace RobWorld
         // desde el robot
         mypos[0] = o->pos.x;
         mypos[1] = o->pos.y;
-
     }
 }

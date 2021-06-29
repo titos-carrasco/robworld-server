@@ -42,7 +42,7 @@ add_executable( ${PROJECT_NAME}
     src/BinaryData.cpp
     src/Connection.cpp
     src/LineProtocol.cpp
-    #src/WebsocketProtocol.cpp
+    src/GetProtocol.cpp
 )
 
 set( EXECUTABLE_OUTPUT_PATH "bin" )

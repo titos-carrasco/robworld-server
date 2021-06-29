@@ -1,6 +1,9 @@
 # ChangeLog
 
-## @v1.2.1 - XXX
+## @v1.2.1 - 2021-06-29
+
+### Fixed
+- Agrega detección de error en envio de tipo de robot
 
 ### Changed
 - Renombra archivos .h a .hpp
@@ -8,6 +11,8 @@
 
 ### Added
 - Agrega (en desarrollo) websocket de manera basica para soportar snap o scratch
+- Agrega HTTP GET para soportar snap
+- Agrega cliente y demo para [SNAP](https://snap.berkeley.edu/)
 
 
 ## @v1.1.1 - 2021-06-15

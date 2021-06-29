@@ -80,7 +80,8 @@ int main(int argc, char* argv[])
         mpg->stop();
         delete mpg;
         //delete viewer;        // Segmentation fault
-    }catch( ... )
+    }
+    catch( ... )
     {
         std::cout << ">> Ooops, esto no deberia haber pasado!!!" << std::endl;
     }

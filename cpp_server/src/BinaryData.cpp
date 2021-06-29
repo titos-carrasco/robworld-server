@@ -16,7 +16,7 @@ namespace RobWorld
 
     BinaryData::~BinaryData()
     {
-        if( data != nullptr ) delete data;
+        if( data != nullptr ) delete[] data;
     }
 
     const unsigned char* BinaryData::getData()

@@ -426,39 +426,42 @@ namespace RobWorld
             else if( n < 0 ) std::cout << ">> Error en la conexion" << std::endl;
             else
             {
+                // la línea de conexión debe venir en formato JSON
                 try
                 {
-                    // la línea de conexión debe venir en formato JSON
                     std::stringstream( buff ) >> json;
-
-                    // recuperamos el nombre del robot con el que se desea trabajar
-                    std::string name = json.get( "connect", "_UNDEF_" ).asString();
-                    if( name.compare( "_UNDEF_") == 0 )
-                    {
-                        std::cout << ">> Comando de conexion es invalido" << std::endl;
-                    }
-                    else
-                    {
-                        // si el robot existe toma el control de este hilo
-                        try{
-                            RobotBase* r = robots.at( name );
-                            r->run( *conn );
-                        }
-                        catch( const std::out_of_range& err )
-                        {
-                            std::cout << ">> Robot solicitado no existe" << std::endl;
-                        }
-                    }
                 }
                 catch( ... )
                 {
                     std::cout << ">> Comando de conexion es invalido" << std::endl;
+                    goto _ABORT;
+                }
+
+                // recuperamos el nombre del robot con el que se desea trabajar
+                std::string name = json.get( "connect", "_UNDEF_" ).asString();
+                if( name.compare( "_UNDEF_") == 0 )
+                    std::cout << ">> Comando de conexion es invalido" << std::endl;
+                else
+                {
+                    // el robot debe existir
+                    RobotBase*  r;
+                    try{
+                        r = robots.at( name );
+                    }
+                    catch( ... )
+                    {
+                        std::cout << ">> Robot solicitado no existe" << std::endl;
+                        goto _ABORT;
+                    }
+
+                    // el robot toma el control
+                    r->run( *conn );
                 }
             }
-            delete conn;
+_ABORT:     delete conn;
         }
         else
-            std::cout << ">> Protocolo no aceptado" << std::endl;
+            std::cout << ">> Protocolo no reconocido" << std::endl;
 
         // fin del hilo
         try { ::shutdown( sock, R_SHUT_RDWR ); }
