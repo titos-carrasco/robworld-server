@@ -1,6 +1,22 @@
 # ChangeLog
 
-## @v1.2.1 - 2021-06-29
+## @v1.1.3 - 2021-06-29
+
+### Fixed
+- Orden de los include para WIN32
+- Fataba definir MSG_NOSIGNAL para WIN32
+- Corrige cast requerido por WIN32
+- Corrige error en el total de leds recibidos para el robot Thymio2
+- Corrige bloques para SNAP ahora construidos sin JS
+
+### Added
+- Agrega proxy HTTP para SNAP
+- Corrige bloques de SNAP
+- Agrega Test en Python para [recorrer laberinto](https://stackoverflow.com/questions/66942322/wall-follower-algorithm-in-prolog)
+- Agrega varios Test para snap
+
+
+## @v1.1.2 - 2021-06-29
 
 ### Fixed
 - Agrega detección de error en envio de tipo de robot

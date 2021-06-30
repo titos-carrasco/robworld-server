@@ -5,15 +5,14 @@
     #define closesocket( s )    close( s )
 #endif
 
-#include <fstream>
-
-#include <viewer/Viewer.h>
+#include "RobotWorld.hpp"
+#include "Connection.hpp"
 #include "RobotThymio2.hpp"
 #include "RobotEPuck.hpp"
 #include "RobotMarxbot.hpp"
 
-#include "RobotWorld.hpp"
-#include "Connection.hpp"
+#include <fstream>
+#include <viewer/Viewer.h>
 
 namespace RobWorld
 {

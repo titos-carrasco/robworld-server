@@ -1,11 +1,7 @@
-#ifdef WIN32
-#define MSG_NOSIGNAL    0
-#endif
-
-#include <chrono>
-
 #include "RobotBase.hpp"
 #include "Connection.hpp"
+
+#include <chrono>
 
 namespace RobWorld
 {
@@ -123,7 +119,7 @@ namespace RobWorld
                     if( leds.size() > 0 )
                     {
                         mtx_enki.lock();
-                        setLeds( &leds[0], n );
+                        setLeds( &leds[0], leds.size() );
                         mtx_enki.unlock();
                     }
                 }

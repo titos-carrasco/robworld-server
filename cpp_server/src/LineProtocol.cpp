@@ -1,6 +1,7 @@
-#include <chrono>
 #include "BinaryData.hpp"
 #include "LineProtocol.hpp"
+
+#include <chrono>
 
 namespace RobWorld
 {

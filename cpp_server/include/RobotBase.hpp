@@ -1,6 +1,8 @@
 #ifndef ROBOTBASE_HPP
 #define ROBOTBASE_HPP
 
+#include "Connection.hpp"
+
 #ifdef WIN32
 #include <json/json.h>
 #include <json/writer.h>
@@ -8,11 +10,12 @@
 #include <jsoncpp/json/json.h>
 #include <jsoncpp/json/writer.h>
 #endif
+
 #include <iostream>
 #include <atomic>
 #include <mutex>
+
 #include <enki/robots/DifferentialWheeled.h>
-#include "Connection.hpp"
 
 namespace RobWorld
 {

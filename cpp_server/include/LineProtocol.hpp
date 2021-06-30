@@ -1,8 +1,9 @@
 #ifndef LINEPROTOCOL_HPP
 #define LINEPROTOCOL_HPP
 
-#include <iostream>
 #include "Connection.hpp"
+
+#include <iostream>
 
 namespace RobWorld
 {

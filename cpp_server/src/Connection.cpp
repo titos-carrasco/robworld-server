@@ -1,16 +1,23 @@
 #ifdef WIN32
     #include <winsock2.h>
+    #include <windows.h>
     #include <ws2tcpip.h>
+
+    #ifndef MSG_NOSIGNAL
+    #define MSG_NOSIGNAL 0
+    #endif
 #else
     #include <sys/socket.h>
     #include <netinet/in.h>
     #include <arpa/inet.h>
     #include <unistd.h>
 #endif
-#include <chrono>
+
 #include "LineProtocol.hpp"
 #include "GetProtocol.hpp"
 #include "Connection.hpp"
+
+#include <chrono>
 
 #define MAXLINELENGTH   1024
 
@@ -123,7 +130,11 @@ namespace RobWorld
 
     int Connection::readbyte( int sock, unsigned char* c )
     {
+        #ifdef WIN32
+        int n = recv( sock, (char *)c, 1, 0 );
+        #else
         int n = recv( sock, c, 1, 0 );
+        #endif
         if( n == 1 ) return 1;
         if( n == 0 ) return -1;
         #ifdef WIN32
@@ -164,7 +175,11 @@ namespace RobWorld
         unsigned int i = 0;
         while( i < len )
         {
+            #ifdef WIN32
+            int n = send( sock, (char *)buff+i, len-i, MSG_NOSIGNAL );
+            #else
             int n = send( sock, buff+i, len-i, MSG_NOSIGNAL );
+            #endif
             if( n <= 0) return false;
             i += n;
         }

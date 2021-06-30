@@ -1,5 +1,6 @@
-#include <cstring>
 #include "BinaryData.hpp"
+
+#include <cstring>
 
 namespace RobWorld
 {

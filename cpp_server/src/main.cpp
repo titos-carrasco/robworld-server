@@ -1,9 +1,10 @@
-#include <QApplication>
-#include <viewer/Viewer.h>
 #include "RobotWorld.hpp"
 #include "RobotThymio2.hpp"
 #include "RobotEPuck.hpp"
 #include "RobotMarxbot.hpp"
+
+#include <QApplication>
+#include <viewer/Viewer.h>
 
 class Viewer : public Enki::ViewerWidget
 {

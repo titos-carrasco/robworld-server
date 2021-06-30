@@ -1,9 +1,10 @@
 #ifndef CONNECTION_HPP
 #define CONNECTION_HPP
 
+#include "BinaryData.hpp"
+
 #include <iostream>
 #include <vector>
-#include "BinaryData.hpp"
 
 #define MAXLINELENGTH   1024
 

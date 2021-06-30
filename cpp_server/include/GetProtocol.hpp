@@ -1,9 +1,10 @@
 #ifndef GETPROTOCOL_HPP
 #define GETPROTOCOL_HPP
 
+#include "Connection.hpp"
+
 #include <iostream>
 #include <vector>
-#include "Connection.hpp"
 
 namespace RobWorld
 {

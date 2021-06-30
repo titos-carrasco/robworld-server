@@ -1,10 +1,12 @@
 #ifndef ROBOTEPUCK_HPP
 #define ROBOTEPUCK_HPP
 
-#include <iostream>
-#include <enki/robots/e-puck/EPuck.h>
 #include "RobotBase.hpp"
 #include "Connection.hpp"
+
+#include <iostream>
+
+#include <enki/robots/e-puck/EPuck.h>
 
 namespace RobWorld
 {

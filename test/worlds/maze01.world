@@ -41,5 +41,5 @@
     { "type":"box", "x":191, "y":15, "sizex":5, "sizey":93, "height":8, "mass":-1, "color":"gray" },
 
 
-    { "type":"epuck", "name":"Epuck-01", "x":185, "y":15, "angle":90 }
+    { "type":"epuck", "name":"Epuck-01", "x":185, "y":20, "angle":90 }
 ]
