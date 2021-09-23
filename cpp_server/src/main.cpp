@@ -4,6 +4,9 @@
 #include "RobotMarxbot.hpp"
 
 #include <QApplication>
+#include <QFileDialog>
+#include <QFileInfo>
+
 #include <viewer/Viewer.h>
 
 class Viewer : public Enki::ViewerWidget
@@ -38,21 +41,36 @@ class Viewer : public Enki::ViewerWidget
 
 int main(int argc, char* argv[])
 {
-    // el únio parámetro debe ser el archivo world
-    if( argc != 2 )
+    // La aplicacion QT
+    QApplication app( argc, argv );
+
+    // necesitamnos el archivo que define el mundo de robots
+    QString fname;
+    if( argc == 1 )
     {
-        std::cout << "Invocar como: robworld archivo.world " << std::endl;
+        fname = QFileDialog::getOpenFileName( nullptr, "Abrir Archivo Mundo", "./", "Archivos world (*.world)" );
+     }
+    else if( argc == 2 )
+    {
+        fname = QString( argv[1] );
+    }
+    else
+    {
+        std::cout << "Invocar como: robworld [archivo.world]" << std::endl;
         return -1;
     }
 
-    // requerido por QT5
-    QApplication app( argc, argv );
+    if( !QFileInfo::exists(fname) || !QFileInfo(fname).isFile() )
+    {
+        std::cout << "Archivo 'world' es invalido" << std::endl;
+        return -1;
+    }
 
     // preparamos el mundo segun el archivo world
     RobWorld::RobotWorld* mpg;
     try
     {
-        mpg = new RobWorld::RobotWorld( argv[1] );
+        mpg = new RobWorld::RobotWorld( fname.toStdString().c_str() );
     }
     catch( std::exception& e)
     {

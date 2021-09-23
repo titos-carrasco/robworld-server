@@ -65,12 +65,12 @@ if(WIN32)
 else()
     target_include_directories( ${PROJECT_NAME} PUBLIC
         include
-        /media/roberto/04fc9677-21e3-40ef-b25d-634b079888a9/roberto/Software/enki
+        /mnt/sda5/roberto/Software/enki
     )
 
     target_link_libraries( ${PROJECT_NAME} PUBLIC
-        /media/roberto/04fc9677-21e3-40ef-b25d-634b079888a9/roberto/Software/enki/build/viewer/libenkiviewer.a
-        /media/roberto/04fc9677-21e3-40ef-b25d-634b079888a9/roberto/Software/enki/build/enki/libenki.a
+        /mnt/sda5/roberto/Software/enki/build/viewer/libenkiviewer.a
+        /mnt/sda5/roberto/Software/enki/build/enki/libenki.a
         Qt5::Core Qt5::Gui Qt5::Widgets Qt5::OpenGL
         ${OPENGL_LIBRARIES}
         Threads::Threads

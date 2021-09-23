@@ -1,6 +1,5 @@
 import time
 import threading
-import subprocess
 
 from robworld.RobotThymio2 import RobotThymio2
 from robworld.RobotEPuck import RobotEPuck
@@ -37,14 +36,6 @@ class TestSensorsThreads():
         pass
 
     def run( self ):
-        # levantamos el simulador en otro proceso
-        try:
-            #pg = subprocess.Popen( [ "robworld", "../worlds/simple.world" ], shell=False )
-            time.sleep( 1 )
-        except Exception as e:
-            print( e )
-            exit()
-
         # los datos de conexion al simulador
         host = "127.0.0.1"
         port = 44444
@@ -65,9 +56,6 @@ class TestSensorsThreads():
         # detenemos los robots
         thymio.finish()
         epuck.finish()
-
-        # detenemos el simulador
-        #pg.send_signal( subprocess.signal.SIGTERM )
 
 
 class MyThymio2( RobotThymio2 ):

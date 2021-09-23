@@ -1,6 +1,5 @@
 import time
 import random
-import subprocess
 
 from robworld.RobotThymio2 import RobotThymio2
 from robworld.RobotEPuck import RobotEPuck
@@ -11,14 +10,6 @@ class TestLed():
         pass
 
     def run( self ):
-        # Levantamos el simulador en otro proceso
-        try:
-            #pg = subprocess.Popen( [ "robworld", "../worlds/simple.world" ], shell=False )
-            time.sleep( 1 )
-        except Exception as e:
-            print( e )
-            exit()
-
         # Los datos de conexion al simulador
         host = "127.0.0.1"
         port = 44444
@@ -48,9 +39,6 @@ class TestLed():
             print( "Conexion abortada" )
         except Exception as e:
             print( e )
-
-        # Detenemos el simulador
-        #pg.send_signal( subprocess.signal.SIGTERM )
 
 
 # show time

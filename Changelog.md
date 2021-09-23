@@ -1,5 +1,11 @@
 # ChangeLog
 
+## @v1.1.4 - 2021-09-23
+
+### Added
+- Cuadro de dialogo para elegir archivo 'world' al ejecutar el programa
+
+
 ## @v1.1.3 - 2021-06-29
 
 ### Fixed
