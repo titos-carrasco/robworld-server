@@ -9,6 +9,8 @@
 
 #include <viewer/Viewer.h>
 
+#include <fstream>
+
 class Viewer : public Enki::ViewerWidget
 {
     public:
@@ -45,14 +47,16 @@ int main(int argc, char* argv[])
     QApplication app( argc, argv );
 
     // necesitamnos el archivo que define el mundo de robots
-    QString fname;
+    std::string fname;
     if( argc == 1 )
     {
-        fname = QFileDialog::getOpenFileName( nullptr, "Abrir Archivo Mundo", "./", "Archivos world (*.world)" );
-     }
+        QString fn = QFileDialog::getOpenFileName( nullptr, "Abrir Archivo Mundo", "./", "Archivos world (*.world)" );
+        QByteArray ba = fn.toLocal8Bit();
+        fname = std::string( ba.data() );
+    }
     else if( argc == 2 )
     {
-        fname = QString( argv[1] );
+        fname = std::string( argv[1] );
     }
     else
     {
@@ -60,17 +64,18 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    if( !QFileInfo::exists(fname) || !QFileInfo(fname).isFile() )
+    std::ifstream f( fname );
+    if( !f.good() )
     {
         std::cout << "Archivo 'world' es invalido" << std::endl;
         return -1;
     }
-
+    f.close();
     // preparamos el mundo segun el archivo world
     RobWorld::RobotWorld* mpg;
     try
     {
-        mpg = new RobWorld::RobotWorld( fname.toStdString().c_str() );
+        mpg = new RobWorld::RobotWorld( fname );
     }
     catch( std::exception& e)
     {

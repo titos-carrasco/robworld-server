@@ -1,10 +1,8 @@
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.util.List;
 
 import rcr.robworld.RobotEPuck;

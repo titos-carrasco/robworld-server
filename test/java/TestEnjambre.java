@@ -1,5 +1,4 @@
 import rcr.robworld.RobotThymio2;
-import rcr.robworld.RobotEPuck;
 
 import java.util.Random;
 

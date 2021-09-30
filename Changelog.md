@@ -1,5 +1,11 @@
 # ChangeLog
 
+## @v1.1.4 - 2021-09-29
+
+### Changed
+- Corrige uso del nombre del archivo cuando presenta caracteres especiales
+
+
 ## @v1.1.4 - 2021-09-23
 
 ### Added
