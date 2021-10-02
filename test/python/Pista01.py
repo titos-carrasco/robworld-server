@@ -39,16 +39,20 @@ class Thymio01( RobotThymio2 ):
 
     def run( self ):
         self.me = threading.current_thread()
-        speed = 10
+        speed = 50
+        th = 700
         self.setSpeed( speed, speed )
         self.running = True
         while(self.running ):
             self.getSensors()
             l, r = self.groundSensorValues
-            if( l >200):
-                self.setSpeed( speed+5, speed )
-            elif( r>200 ):
-                self.setSpeed( speed, speed+5 )
+            #print( "%05.1f %02.1f" % (l,r) )
+            if( l>=th and r>=th ):
+                self.setSpeed( -speed, -speed )
+            elif( l>=th and r<th  ):
+                self.setSpeed( speed, 0 )
+            elif( l<th and r>=th ):
+                self.setSpeed( 0, speed )
             else:
                 self.setSpeed( speed, speed )
             time.sleep( 0.01 )
@@ -68,16 +72,20 @@ class Thymio02( RobotThymio2 ):
 
     def run( self ):
         self.me = threading.current_thread()
-        speed = 10
+        speed = 50
+        th = 700
         self.setSpeed( speed, speed )
         self.running = True
         while(self.running ):
             self.getSensors()
             l, r = self.groundSensorValues
-            if( l >200):
-                self.setSpeed( speed+5, speed )
-            elif( r>200 ):
-                self.setSpeed( speed, speed+5 )
+            #print( "%05.1f %02.1f" % (l,r) )
+            if( l>=th and r>=th ):
+                self.setSpeed( -speed, -speed )
+            elif( l>=th and r<th  ):
+                self.setSpeed( speed, 0 )
+            elif( l<th and r>=th ):
+                self.setSpeed( 0, speed )
             else:
                 self.setSpeed( speed, speed )
             time.sleep( 0.01 )

@@ -5,8 +5,8 @@
     { "type":"color", "name":"green", "r":0, "g":128, "b":0, "a":255 },
     { "type":"color", "name":"blue" , "r":0, "g":0, "b":255, "a":255 },
 
-    { "type":"world", "width":200, "height":100, "walls": 5, "color":"white", "ground":"Pista01.ppm", "host":"", "port":44444  },
+    { "type":"world", "width":200, "height":100, "walls": 5, "color":"white", "ground":"Pista01.png", "host":"", "port":44444  },
 
-    { "type":"thymio2", "name":"Thymio-01", "x":100, "y":85, "angle":180 },
-    { "type":"thymio2", "name":"Thymio-02", "x":100, "y":15 }
+    { "type":"thymio2", "name":"Thymio-01", "x":100, "y":82, "angle":180 },
+    { "type":"thymio2", "name":"Thymio-02", "x":100, "y":18, "angle":0 }
 ]

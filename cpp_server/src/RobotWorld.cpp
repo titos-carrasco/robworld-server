@@ -138,10 +138,11 @@ namespace RobWorld
                             fname = world_file_name.substr( 0, pos ) + "\\" + ground;
                     }
 
-                    QImage xpm( fname.c_str() );
-                    if( xpm.format() > 0 )
+                    QString f = QString::fromLocal8Bit( fname.c_str() );
+                    QImage gnd( f );
+                    if( gnd.format() > 0 )
                     {
-                        QImage qgt( QGLWidget::convertToGLFormat( xpm ) );
+                        QImage qgt( QGLWidget::convertToGLFormat( gnd ) );
                         gt = Enki::World::GroundTexture( qgt.width(), qgt.height(), (const uint32_t*)qgt.constBits() );
                     }
                 }

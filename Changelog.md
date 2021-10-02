@@ -1,9 +1,15 @@
 # ChangeLog
 
+## @v1.1.4 - 2021-10-02
+
+### Changed
+- Corrige uso de la ruta ruta del archivo 'ground' (el la definición del mundo) cuando presenta caracteres especiales
+
+
 ## @v1.1.4 - 2021-09-29
 
 ### Changed
-- Corrige uso del nombre del archivo cuando presenta caracteres especiales
+- Corrige uso del nombre del archivo y ruta del archivo 'world' cuando presenta caracteres especiales
 
 
 ## @v1.1.4 - 2021-09-23
