@@ -44,6 +44,8 @@ namespace RobWorld
         for( int i=0; i < n; i++ )
             myVirtualBumpers[i] = Marxbot::getVirtualBumper( i );
 
+        myAngleRad = angle;
+
         RobotBase::myControlStep( this );
 
         RobotBase::mtx_enki.unlock();

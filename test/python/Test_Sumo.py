@@ -27,6 +27,7 @@ class TestSumo():
 
                 print( "pos:", rob.pos )
                 print( "speed:", rob.speed )
+                print( "angle:", rob.angle )
                 print( "proximitySensorValues:", rob.proximitySensorValues )
                 print( "proximitySensorDistances:" , rob.proximitySensorDistances )
                 print( "groundSensorValues:" , rob.groundSensorValues )

@@ -28,6 +28,9 @@ public class TestSumo {
                 System.out.print( "speed: " );
                 System.out.println( Arrays.toString( rob.getSpeed() ) );
 
+                System.out.print( "angle: " );
+                System.out.println( rob.getAngle() );
+
                 System.out.print( "proximitySensorValues: " );
                 System.out.println( Arrays.toString( rob.getProximitySensorValues() ) );
 

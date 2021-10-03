@@ -25,6 +25,7 @@ public class RobotBase {
 
     private double[] pos = null;
     private double[] speed = null;
+    private double angle = 0;
 
     public RobotBase( String name, String host, int port, String tipo ) throws Exception {
         this.host = host;
@@ -76,6 +77,10 @@ public class RobotBase {
         return speed;
     }
 
+    public double getAngle() {
+        return angle;
+    }
+
     public void setSpeed( int leftSpeed, int rightSpeed ) throws Exception {
         JsonObject jobj = Json.createObjectBuilder()
             .add( "cmd", "setSpeed" )
@@ -98,6 +103,7 @@ public class RobotBase {
 
         speed = getDoubleArray( json.getJsonArray( "speed" ) );
         pos = getDoubleArray( json.getJsonArray( "pos" ) );
+        angle = json.getJsonNumber( "angle" ).doubleValue();
 
         return json;
     }

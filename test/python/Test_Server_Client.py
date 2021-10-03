@@ -29,6 +29,7 @@ class TestServerClient():
                 rob02.getSensors()
                 print( "pos:", rob02.pos )
                 print( "speed:", rob02.speed )
+                print( "angle:", rob02.angle )
                 print( "proximitySensorValues:", rob02.proximitySensorValues )
                 print( "proximitySensorDistances:" , rob02.proximitySensorDistances )
 

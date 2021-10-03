@@ -31,6 +31,7 @@ namespace RobWorld
             std::mutex mtx_enki;
             std::string name;
             std::string tipo;
+            double myAngleRad;
 
         public:
             RobotBase( std::string, std::string );

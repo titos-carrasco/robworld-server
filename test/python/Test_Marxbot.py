@@ -26,6 +26,7 @@ class TestMarxbot():
                 rob.getSensors()
                 print( "pos:", rob.pos )
                 print( "speed:", rob.speed )
+                print( "angle:", rob.angle )
                 print( "virtualBumpers:", rob.virtualBumpers[0] )
 
                 time.sleep( 1 )

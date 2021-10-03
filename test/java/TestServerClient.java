@@ -33,6 +33,9 @@ public class TestServerClient {
                 System.out.print( "speed: " );
                 System.out.println( Arrays.toString( rob02.getSpeed() ) );
 
+                System.out.print( "angle: " );
+                System.out.println( rob02.getAngle() );
+
                 System.out.print( "proximitySensorValues: " );
                 System.out.println( Arrays.toString( rob02.getProximitySensorValues() ) );
 

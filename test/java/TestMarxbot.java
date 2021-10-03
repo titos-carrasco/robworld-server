@@ -31,7 +31,10 @@ public class TestMarxbot {
                 System.out.print( "speed: " );
                 System.out.println( Arrays.toString( rob.getSpeed() ) );
 
-                System.out.print( "virtualBumoers: " );
+                System.out.print( "angle: " );
+                System.out.println( rob.getAngle() );
+
+                System.out.print( "virtualBumpers: " );
                 System.out.println( Arrays.toString( rob.getVirtualBumpers() ) );
 
 

@@ -20,6 +20,7 @@ class RobotBase():
 
         self.pos = None
         self.speed = None
+        self.angle = None
 
         self.connect( name, host, port )
 
@@ -67,6 +68,7 @@ class RobotBase():
         resp = self.sendPkg( pkg )
         self.pos = tuple( resp["pos"] )
         self.speed = tuple( resp["speed"]  )
+        self.angle = resp["angle"]
         return resp
 
     def connect(self, name:str, host:str, port:int ):

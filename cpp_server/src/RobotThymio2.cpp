@@ -72,6 +72,8 @@ namespace RobWorld
         myGroundSensorValues[0] = Thymio2::groundSensor0.getValue();
         myGroundSensorValues[1] = Thymio2::groundSensor1.getValue();
 
+        myAngleRad = angle;
+
         RobotBase::myControlStep( this );
 
         RobotBase::mtx_enki.unlock();

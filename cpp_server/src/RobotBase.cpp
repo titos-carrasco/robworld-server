@@ -2,12 +2,13 @@
 #include "Connection.hpp"
 
 #include <chrono>
+#include <math.h>
 
 namespace RobWorld
 {
     RobotBase::RobotBase( std::string _name, std::string _tipo ) :
         running( false ), mtx(), mypos{ .0, .0 }, myspeed{ .0, .0 },
-        mtx_enki(), name(_name), tipo( _tipo )
+        mtx_enki(), name(_name), tipo( _tipo ), myAngleRad(0)
     {
         std::cout << ">> Construyendo base para el robot '" << std::flush;
         std::cout << name << std::flush;
@@ -38,6 +39,8 @@ namespace RobWorld
         Json::Value resp;
         Json::StreamWriterBuilder jwbuilder;
         jwbuilder["indentation"] = "";
+        jwbuilder.settings_["precisionType"] = "decimal";
+        jwbuilder.settings_["precision"] = 6;
 
         // enviamos el tipo de robot que somos
         std::stringstream( "{ \"type\":\"" + tipo + "\"}" ) >> resp;
@@ -75,6 +78,10 @@ namespace RobWorld
 
                     resp["speed"] = Json::arrayValue;
                     for( unsigned int i = 0; i<sizeof(myspeed)/sizeof(myspeed[0]); i++ ) resp["speed"].append( myspeed[i] );
+
+                    double grad = myAngleRad*(180/M_PI);
+                    if( grad<0 ) grad = 360 + grad;
+                    resp["angle"] = grad;
 
                     getSensors( resp );
                     mtx_enki.unlock();

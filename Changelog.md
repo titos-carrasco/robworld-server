@@ -1,9 +1,13 @@
 # ChangeLog
 
-## @v1.1.4 - 2021-10-02
+## @v1.1.5 - 2021-10-05
+
+### Added
+- Ángulo actual de orientación del robot se incluye en los sensores retornados
 
 ### Changed
 - Corrige uso de la ruta ruta del archivo 'ground' (el la definición del mundo) cuando presenta caracteres especiales
+- Modifica librerías y demos para incoporar el atributo 'angle' retornado con los sensores
 
 
 ## @v1.1.4 - 2021-09-29

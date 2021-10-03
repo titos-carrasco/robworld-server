@@ -77,6 +77,8 @@ namespace RobWorld
             myCameraImage[n++] = int( c.a()*255 );
         }
 
+        myAngleRad = angle;
+
         RobotBase::myControlStep( this );
 
         RobotBase::mtx_enki.unlock();
