@@ -11,7 +11,12 @@
 # cd build
 # cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DOpenGL_GL_PREFERENCE=GLVND ..
 # cmake --build . --config Release
-# ./bin/robworld ../../test/worlds/simple.world
+# ./bin/robworld
+
+# mingw64
+# mkdir build64
+# cd build64
+# cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DOpenGL_GL_PREFERENCE=GLVND -DX=64 ..
 
 cmake_minimum_required(VERSION 3.1.0)
 

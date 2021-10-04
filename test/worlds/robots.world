@@ -4,9 +4,9 @@
     { "type":"color", "name":"green", "r":0, "g":128, "b":0, "a":255 },
     { "type":"color", "name":"blue" , "r":0, "g":0, "b":255, "a":255 },
 
-    { "type":"world", "width":100, "height":100, "walls": 0, "color":"gray", "ground": "", "host":"", "port":44444  },
+    { "type":"world", "width":200, "height":200, "walls": 0, "color":"gray", "ground": "grid.png", "host":"", "port":44444  },
 
     { "type":"thymio2", "name":"Thymio-01", "x":50, "y":50, "angle":0 },
-    { "type":"epuck", "name":"Epuck-01", "x":50, "y":90, "angle":0 },
-    { "type":"marxbot", "name":"Marxbot-01", "x":50, "y":50, "angle":0 }
+    { "type":"epuck", "name":"Epuck-01", "x":100, "y":100, "angle":0 },
+    { "type":"marxbot", "name":"Marxbot-01", "x":150, "y":150, "angle":0 }
 ]
