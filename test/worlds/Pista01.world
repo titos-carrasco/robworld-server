@@ -7,6 +7,6 @@
 
     { "type":"world", "width":200, "height":100, "walls": 5, "color":"white", "ground":"Pista01.png", "host":"", "port":44444  },
 
-    { "type":"thymio2", "name":"Thymio-01", "x":100, "y":82, "angle":180 },
-    { "type":"thymio2", "name":"Thymio-02", "x":100, "y":18, "angle":0 }
+    { "type":"thymio2", "name":"Thymio-01", "x":100, "y":80, "angle":180 },
+    { "type":"thymio2", "name":"Thymio-02", "x":100, "y":20, "angle":0 }
 ]

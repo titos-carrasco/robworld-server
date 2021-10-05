@@ -1,6 +1,13 @@
 # ChangeLog
 
-## @v1.1.5 - 2021-10-05
+## 2021-10-05
+
+### Changed
+- Reduce los dpi de las imagenes en los "worlds" de prueba para minimizar uso de memoria (18dpi es suficiente)
+- Elimina conversión de imagen de fondo a través de QGLWidget::convertToGLFormat (no es requerido)
+
+
+## @v1.1.5 - 2021-10-04
 
 ### Added
 - Ángulo actual de orientación del robot se incluye en los sensores retornados
