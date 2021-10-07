@@ -17,7 +17,7 @@ world
         height : dimensión Y del mundo
         walls  : alto de las murallas que lo rodean
         color  : nombre del color a utilizzar (debe estar definido previamente)
-        ground : ruta de archivo ppp para usar de "suelo". Puede especificar "" para indicar que no se utilizará
+        ground : ruta de archivo png/gif/etc... para usar de "suelo". Puede especificar "" para indicar que no se utilizará
         host   : direción IP local en donde se recibirán las conexiones a los robots:
                  ""          -> se usarán todas las interfaces
                  "127.0.0.1" -> se usará sólo locahost
