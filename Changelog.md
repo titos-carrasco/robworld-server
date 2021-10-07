@@ -1,5 +1,19 @@
 # ChangeLog
 
+## @v1.1.6 2021-10-07
+
+### Removed
+- Cliente Java es movido a otro repositorio
+- Cliente Python es movido a otro repositorio
+- Directorio SNAP es eliminado del repositorio
+
+### Fixed
+- Convierte imagen de fondo a RGB32 para asegurar consistencia con cualquier formato de imagen recibido
+
+### Changed
+- Directorio de mundos de prueba se lleva a la raiz del respositorio
+
+
 ## 2021-10-05
 
 ### Changed

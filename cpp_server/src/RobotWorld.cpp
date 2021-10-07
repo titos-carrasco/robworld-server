@@ -142,7 +142,7 @@ namespace RobWorld
                     QImage gnd( f );
                     if( gnd.format() > 0 )
                     {
-                        QImage mirror = gnd.mirrored( false, true );
+                        QImage mirror = gnd.mirrored( false, true ).convertToFormat( QImage::Format_ARGB32 );
                         gt = Enki::World::GroundTexture( mirror.width(), mirror.height(), (const uint32_t*)mirror.constBits() );
                     }
                 }

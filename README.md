@@ -1,4 +1,4 @@
-# RobWorld
+" RobWorld
 
 Simulador de entorno de robots en C++ utilizando [ENKI Robot Simulator](https://github.com/enki-community/enki)
 
@@ -6,13 +6,16 @@ Simulador de entorno de robots en C++ utilizando [ENKI Robot Simulator](https://
 
 ![](images/img-04.png "") ![](images/img-05.png "") ![](images/img-06.png "")
 
-![](images/img-07.png "")
+![](images/img-07.png "") ![](images/img-08.png "")
 
 
-El acceso al simulador es a través de TCP/IP a través de librerías en Java o Python
+El acceso al simulador es a través de TCP/IP, intercambiando mensajes en formato JSON y utilizando las librerias:
+
+- [robworld-client-java](https://github.com/titos-carrasco/robworld-client-java)
+- [robworld-client-python](https://github.com/titos-carrasco/robworld-client-python)
 
 
-## Para generar e instalar la librería python
-> $ python setup.py bdist_wheel
+Ejecutables:
 
-> $ pip install dist/robworld-X.Y.Z-py3-none-any.whl
+- Linux, creado en Debian Testing con QT5-5.15.2
+- Windows 32/64, creados en Windows 10 con MSYS2 MinGW y QT5-5.15.2
