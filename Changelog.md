@@ -1,5 +1,14 @@
 # ChangeLog
 
+## @v1.1.6.1 2024-07-03
+
+### Changed
+- Fija resolución de la ventana principal al cargar el mundo de robots
+- Crea procedimiento para generar el ejecutable con sus dependencias
+- Actualiza README para documentyar todo el proceso de generación del ejecutable
+- Mehora CMakeLists.txt
+
+
 ## @v1.1.6 2021-10-07
 
 ### Removed

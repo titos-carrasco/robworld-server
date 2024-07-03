@@ -1,4 +1,8 @@
 build/
+build32/
+build64/
 dist/
+dist32/
+dist64/
 *.egg-info/
 old/

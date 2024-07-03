@@ -71,6 +71,7 @@ int main(int argc, char* argv[])
         return -1;
     }
     f.close();
+    
     // preparamos el mundo segun el archivo world
     RobWorld::RobotWorld* mpg;
     try
@@ -97,6 +98,7 @@ int main(int argc, char* argv[])
     try
     {
         viewer->show();
+        viewer->resize(800, 600);
         mpg->run();
         exit_code = app.exec();
 
